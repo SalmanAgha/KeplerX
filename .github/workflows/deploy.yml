@@ -11,15 +11,8 @@ jobs:
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v3
-
-      - name: 🔧 Install Node.js & Build Frontend
-        uses: actions/setup-node@v3
         with:
-          node-version: '18'
-      - run: |
-          cd frontend
-          npm install
-          npm run build
+          fetch-depth: 1  # Sirf latest commit pull karega, taake speed fast ho
 
       - name: 📤 Upload Build Folder to Server
         uses: appleboy/scp-action@master
@@ -28,5 +21,5 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "frontend/build/*"
-          target: "/u768586423/domains/keplerx.digital/public_html/kx/frontend/build"
+          target: "/u768586423/domains/keplerx.digital/public_html/kx/frontend/"
           strip_components: 2
