@@ -1,0 +1,137 @@
+.testimonials {
+  padding: 60px 50px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.testimonials-title {
+  font-size: 3rem;
+  margin-bottom: 40px;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-transform: uppercase;
+}
+
+.testimonial-card {
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 32%);
+  padding: 20px;
+  max-width: 100%;
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: solid 2px white;
+}
+
+.testimonial-card:hover {
+  background: rgba(4, 94, 99, 0.1) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(6.3px) !important;
+  -webkit-backdrop-filter: blur(6.3px) !important;
+  transform: translateY(-10px);
+  border: solid 2px #045e63;
+}
+
+.testimonial-logo {
+  max-width: 100px;
+  margin-bottom: 15px;
+}
+
+.testimonial-card h3 {
+  color: #072e33;
+  font-weight: 600;
+  font-size: 23px;
+  margin-bottom: 5px;
+}
+
+.testimonial-card h4 {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.testimonial-card p {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.testimonial-rating {
+  color: #f39c12;
+  font-size: 1.2rem;
+}
+
+.testimonial-card blockquote {
+  font-style: italic;
+  color: #555;
+  position: relative;
+  padding-left: 30px;
+  margin: 0;
+}
+
+.testimonial-card blockquote:before {
+  content: "\201C";
+  font-size: 3rem;
+  position: absolute;
+  left: 0;
+  top: -10px;
+  color: #ccc;
+}
+
+.testimonial-card footer {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.testimonials-slider {
+  display: flex;
+  align-items: center;
+}
+
+.slick-slide {
+  /* display: none; */
+  float: left;
+  height: 100%;
+  min-height: 1px;
+  padding: 10px;
+  
+}
+
+.slick-prev:before, .slick-next:before {
+  font-family: 'slick';
+  font-size: 25px;
+  line-height: 1;
+  opacity: .75;
+  color: #072e33;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 0px;
+}
+
+.slider-button {
+  background-color: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.slider-button:hover {
+  color: #004d40;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  justify-items: center;
+  flex-grow: 1;
+}
+
+@media (max-width: 768px) {
+  .testimonials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+} 

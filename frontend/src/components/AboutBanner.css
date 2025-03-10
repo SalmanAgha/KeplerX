@@ -1,0 +1,110 @@
+.about-banner {
+    background-color: var(--primary-color);
+    background-size: cover;
+    background-position: center;
+    height: 80vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin-top: -66px;
+    overflow: hidden;
+}
+
+.about-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('../assets/Images/line-vector-sec.svg') no-repeat;
+    background-size: cover;
+    opacity: 0.3;
+    z-index: 0;
+}
+
+.about-banner-content {
+    position: relative;
+    z-index: 1;
+    padding: 0 15px;
+    text-align: center;
+    max-width: 100%;
+}
+
+.about-banner-content h1 {
+    font-size: 7rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.about-banner-content h1 .highlighted {
+    color: white;
+}
+
+.about-banner-content p {
+    font-size: 1.2rem;
+    color: white;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.partner-logos {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 40px;
+    width: 100%;
+    overflow: hidden;
+    padding: 20px 0;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.logo-slider {
+    display: flex;
+    animation: slide 20s linear infinite;
+    width: calc(150px * 10); /* Width of each logo * number of logos */
+}
+
+.logo-slider img {
+    height: 50px;
+    margin: 0 30px;
+    opacity: 0.7;
+    filter: grayscale(100%);
+    transition: all 0.3s ease;
+}
+
+.logo-slider img:hover {
+    opacity: 1;
+    filter: grayscale(0);
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-150px * 5)); /* Half the width of the slider */
+    }
+}
+
+@media (max-width: 768px) {
+    .about-banner-content h1 {
+        font-size: 3rem;
+    }
+    .about-banner {
+        padding-left: 20px;
+        padding-right: 20px;
+        height: 80vh;
+    }
+    .logo-slider img {
+        height: 40px;
+        margin: 0 15px;
+    }
+} 

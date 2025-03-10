@@ -1,0 +1,138 @@
+.design-process-timeline {
+  padding: 60px 0;
+  margin-bottom: 80px;
+}
+
+.timeline-title {
+  font-size: 3rem;
+  color: #072e33;
+  margin-bottom: 60px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.timeline-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 100%;
+  background-color: #0cc0df;
+  z-index: 1;
+}
+
+.timeline-stage {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 80px;
+}
+
+.timeline-dot {
+  width: 30px;
+  height: 30px;
+  background-color: #0cc0df;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  box-shadow: 0 0 0 8px rgba(12, 192, 223, 0.2);
+}
+
+.timeline-content {
+  width: 45%;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.timeline-icon {
+  width: 80px;
+  height: 80px;
+  background-color: #f0f9fa;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-icon img {
+  width: 50px;
+  height: 50px;
+}
+
+.timeline-stage-title {
+  font-size: 1.8rem;
+  color: #072e33;
+  margin-bottom: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.timeline-details {
+  color: #555;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.timeline-details p {
+  margin-bottom: 5px;
+}
+
+@media (max-width: 992px) {
+  .timeline-container {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+  
+  .timeline-line {
+    left: 30px;
+    transform: none;
+  }
+  
+  .timeline-stage {
+    justify-content: flex-start;
+    margin-left: 30px;
+  }
+  
+  .timeline-dot {
+    left: 0;
+    transform: none;
+  }
+  
+  .timeline-content {
+    width: calc(100% - 60px);
+    margin-left: 60px;
+  }
+}
+
+@media (max-width: 576px) {
+  .timeline-stage {
+    margin-left: 15px;
+  }
+  
+  .timeline-dot {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .timeline-content {
+    padding: 15px;
+    margin-left: 40px;
+  }
+} 

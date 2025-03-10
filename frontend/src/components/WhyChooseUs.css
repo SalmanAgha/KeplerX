@@ -1,0 +1,168 @@
+.why-choose-section {
+  background-color: #f9f9f9;
+  padding: 60px 0;
+}
+
+.why-choose-container {
+  display: flex;
+  background-color: var(--secondary-color);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.why-choose-left {
+  flex: 0 0 40%;
+  padding: 30px;
+}
+
+.why-choose-left h2 {
+  color: white;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+
+
+.why-choose-left p {
+  color: #adb5bd;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.learn-more-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.arrow {
+  margin-left: 8px;
+  font-size: 1.2rem;
+  transition: transform 0.3s;
+}
+
+.learn-more-btn:hover .arrow {
+  transform: translateX(5px);
+}
+
+.why-choose-right {
+  flex: 0 0 60%;
+  display: flex;
+  flex-direction: column;
+}
+
+.achievement-header {
+  display: flex;
+  align-items: center;
+  border: solid 2px white;
+  border-radius: 106px;
+  padding: 20px 30px;
+  margin-bottom: 30px;
+}
+
+.medal-icon {
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+}
+
+.achievement-header h3 {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 5px 0;
+}
+
+.achievement-header p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.achievement-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-item h2 {
+  color: white;
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.plus, .percent {
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.stat-item p {
+  color: #adb5bd;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+@media (max-width: 992px) {
+  .why-choose-container {
+    flex-direction: column;
+    padding: 30px 20px;
+  }
+  
+  .why-choose-left {
+    flex: 0 0 100%;
+    padding: 20px 0;
+    margin-bottom: 30px;
+  }
+  
+  .why-choose-right {
+    flex: 0 0 100%;
+  }
+  
+  .achievement-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+}
+
+@media (max-width: 576px) {
+  .achievement-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 15px;
+  }
+  
+  .medal-icon {
+    margin: 0 0 15px 0;
+  }
+  
+  .stat-item h2 {
+    font-size: 2.5rem;
+  }
+  
+  .plus, .percent {
+    font-size: 1.6rem;
+  }
+} 

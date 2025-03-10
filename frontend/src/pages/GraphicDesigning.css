@@ -1,0 +1,113 @@
+.graphic-design-section {
+  padding: 60px 0;
+  background-color: #f9f9f9;
+}
+
+.graphic-design-intro {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 60px;
+}
+
+.graphic-design-intro h2 {
+  font-size: 3rem;
+  color: #072e33;
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.graphic-design-intro p {
+  font-size: 1.2rem;
+  color: #555;
+  line-height: 1.8;
+}
+
+.graphic-design-services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-bottom: 80px;
+}
+
+.graphic-design-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  transition: all 0.3s ease;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: solid 2px white;
+}
+
+.graphic-design-card:hover {
+  background: rgba(4, 94, 99, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6.3px);
+  -webkit-backdrop-filter: blur(6.3px);
+  transform: translateY(-10px);
+  border: solid 2px #045e63;
+}
+
+.graphic-design-card img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+}
+
+.graphic-design-card h3 {
+  font-size: 1.5rem;
+  color: #072e33;
+  margin-bottom: 15px;
+}
+
+.graphic-design-card p {
+  font-size: 1rem;
+  color: #555;
+}
+
+@media (max-width: 1200px) {
+  .graphic-design-services-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .graphic-design-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .graphic-design-services-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .graphic-design-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .graphic-design-services-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .graphic-design-card {
+    padding: 15px;
+  }
+  
+  .graphic-design-card img {
+    max-width: 60px;
+    height: 60px;
+  }
+  
+  .graphic-design-card h3 {
+    font-size: 1.2rem;
+  }
+} 

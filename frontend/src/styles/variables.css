@@ -1,0 +1,45 @@
+/* src/styles/variables.css */
+:root {
+    /* Colors */
+    --primary-color: #072e33;    /* Dark teal color for topbar */
+    --secondary-color: #0c7075;  /* Light teal color for navbar */
+    --text-light: #ffffff;       /* White text */
+    --text-dark: #333333;        /* Dark text */
+    
+    /* Font sizes */
+    --font-small: 14px;
+    --font-medium: 16px;
+    --font-large: 18px;
+    
+    /* Container Width & Padding */
+    --container-padding: 100px;
+    --container-max-width: 1920px;
+}
+
+/* Global container class */
+.custom-container {
+    width: 100%;
+    max-width: var(--container-max-width);
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+    margin: 0 auto;
+}
+
+/* Responsive container padding */
+@media (max-width: 1200px) {
+    :root {
+        --container-padding: 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --container-padding: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --container-padding: 20px;
+    }
+}
