@@ -1,4 +1,4 @@
-name: Deploy to All Servers
+name: Deploy Build Folder to Server
 
 on:
   push:
@@ -12,31 +12,21 @@ jobs:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v3
 
-      - name: 🔧 Install Node.js
+      - name: 🔧 Install Node.js & Build Frontend
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-
-      - name: 📦 Install Dependencies and Build Frontend
-        run: |
+      - run: |
           cd frontend
           npm install
           npm run build
-          cd ../backend
-          npm install
 
-      - name: 🚀 Deploy to All Servers
-        uses: appleboy/ssh-action@master
+      - name: 📤 Upload Build Folder to Server
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_HOST_1 }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            cd /u768586423/domains/keplerx.digital/public_html/kx
-            git pull origin production
-            cd frontend
-            npm install
-            npm run build
-            cd ../backend
-            npm install
-            pm2 restart all
+          source: "frontend/build/*"
+          target: "/u768586423/domains/keplerx.digital/public_html/kx/frontend/build"
+          strip_components: 2
