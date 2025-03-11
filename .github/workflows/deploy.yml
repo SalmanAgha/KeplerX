@@ -1,25 +1,25 @@
-name: Deploy Build Folder to Server
+name: Deploy to Hosting
 
 on:
   push:
     branches:
-      - production  # Jab production branch pe push hoga, tab ye trigger hoga
+      - production
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 1  # Sirf latest commit pull karega, taake speed fast ho
 
-      - name: 📤 Upload Build Folder to Server
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST_1 }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "frontend/build/*"
-          target: "/u768586423/domains/keplerx.digital/public_html/kx/frontend/"
-          strip_components: 2
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST_1 }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to Server
+        run: |
+          rsync -avz --delete --exclude='.git' ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST_1 }}:/home/${{ secrets.SSH_USER }}/public_html/kx
