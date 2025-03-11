@@ -4,7 +4,7 @@ import './Dashboard.css';
 const Dashboard: React.FC = () => {
   return (
     <div className="dashboard-container">
-      <h1>Admin Dashboard</h1>
+      <h1>keplerx admin</h1>
       <div className="dashboard-content">
         <div className="dashboard-card">
           <h2>Users</h2>
