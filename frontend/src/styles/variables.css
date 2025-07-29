@@ -2,6 +2,7 @@
 :root {
     /* Colors */
     --primary-color: #072e33;    /* Dark teal color for topbar */
+    --primary-color-rgb: 7, 46, 51; /* RGB values of primary color for opacity usage */
     --secondary-color: #0c7075;  /* Light teal color for navbar */
     --text-light: #ffffff;       /* White text */
     --text-dark: #333333;        /* Dark text */
@@ -25,6 +26,17 @@
     margin: 0 auto;
 }
 
+.container {
+    width: 1900px !important;
+    max-width: 100%;
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+p{
+    margin-bottom: 0px;
+}
+
 /* Responsive container padding */
 @media (max-width: 1200px) {
     :root {
@@ -36,6 +48,7 @@
     :root {
         --container-padding: 30px;
     }
+    
 }
 
 @media (max-width: 480px) {
@@ -43,3 +56,4 @@
         --container-padding: 20px;
     }
 }
+

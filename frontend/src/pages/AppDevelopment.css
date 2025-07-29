@@ -1,0 +1,83 @@
+.app-dev-section {
+  padding: 80px 50px;
+}
+
+.app-dev-intro {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 60px;
+}
+
+.app-dev-intro h2 {
+  font-size: 3rem;
+  color: #072e33;
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.app-dev-intro p {
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  line-height: 1.6;
+}
+
+.appdev-services-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+  margin-bottom: 80px;
+}
+
+@media (max-width: 1200px) {
+  .appdev-services-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .appdev-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .appdev-services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.appdev-card {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 2px solid white;
+  text-align: center;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.appdev-card:hover {
+  background: rgba(4, 94, 99, 0.1);
+  transform: translateY(-10px);
+  border-color: #045e63;
+}
+
+.appdev-card img {
+  max-width: 80px;
+  margin-bottom: 15px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.appdev-card h3 {
+  font-size: 1.3rem;
+  color: #072e33;
+  font-weight: 600;
+}
+
+.appdev-card p {
+  font-size: 0.95rem;
+  color: #6c757d;
+  line-height: 1.5;
+} 

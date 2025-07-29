@@ -1,148 +1,125 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Portfolio.css';
 import Breadcrumb from '../components/Breadcrumb';
+import PortfolioCard from '../components/PortfolioCard';
+
+interface PortfolioItem {
+  _id: string;
+  title: string;
+  categories: string[];
+  displayCategories: string[];
+  client: string;
+  date: string;
+  description: string;
+  image: string;
+  bgColor?: string;
+}
 
 const Portfolio: React.FC = () => {
+  const navigate = useNavigate();
   const [filter, setFilter] = useState('all');
+  const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
-  const portfolioItems = [
-    {
-      id: 1,
-      title: 'Identity Design',
-      category: 'graphic',
-      image: 'https://picsum.photos/id/1/600/400',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      bgColor: '#2d2150'
-    },
-    {
-      id: 2,
-      title: 'Website Design',
-      category: 'web',
-      image: 'https://picsum.photos/id/2/600/400',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      bgColor: '#1a3a4a'
-    },
-    {
-      id: 3,
-      title: 'Product Design',
-      category: 'graphic',
-      image: 'https://picsum.photos/id/3/600/400',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      bgColor: '#3d2d5c'
-    },
-    {
-      id: 4,
-      title: 'Digital Advertising',
-      category: 'marketing',
-      image: 'https://picsum.photos/id/4/600/400',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      bgColor: '#4a2d1a'
-    },
-    {
-      id: 5,
-      title: 'Mobile App Design',
-      category: 'mobile',
-      image: 'https://picsum.photos/id/5/600/400',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      bgColor: '#2d4a3a'
-    },
-    {
-      id: 6,
-      title: 'Social Media Design',
-      category: 'marketing',
-      image: 'https://picsum.photos/id/6/600/400',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      bgColor: '#4a1a2d'
-    },
-    {
-      id: 7,
-      title: 'UI/UX Design',
-      category: 'web',
-      image: 'https://picsum.photos/id/7/600/400',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      bgColor: '#1a4a3d'
-    },
-    {
-      id: 8,
-      title: 'Packaging Design',
-      category: 'graphic',
-      image: 'https://picsum.photos/id/8/600/400',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      bgColor: '#3a1a4a'
-    }
-  ];
+  useEffect(() => {
+    const fetchPortfolios = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:5000/api/portfolio');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        // Use all portfolio items regardless of category
+        setPortfolioItems(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching portfolios:', err);
+        setError('Failed to load portfolio items. Please try again later.');
+        setLoading(false);
+      }
+    };
+    
+    fetchPortfolios();
+  }, []);
   
+  // Set up category filters based on available categories in the data
+  const availableCategories = Array.from(new Set(
+    portfolioItems.flatMap(item => item.displayCategories || [])
+  ));
+  
+  // Filter items if a specific category is selected
   const filteredItems = filter === 'all' 
     ? portfolioItems 
-    : portfolioItems.filter(item => item.category === filter);
+    : portfolioItems.filter(item => item.displayCategories && item.displayCategories.includes(filter));
   
   return (
     <>
       <Breadcrumb 
-        title="Portfolio" 
+        title="Our Portfolio" 
         path={['Home', 'Portfolio']} 
       />
       
       <section className="portfolio-section">
-        <div className="container">
+        <div className="">
           <div className="portfolio-intro">
-            <h2>Our Creative Portfolio</h2>
+            <h2>Our Complete Portfolio</h2>
             <p>
-              Explore our diverse collection of projects that showcase our expertise in web development, 
-              mobile applications, and graphic design. Each project represents our commitment to quality, 
-              innovation, and client satisfaction.
+              Explore our diverse portfolio showcasing our expertise across various industries and services.
+              From web development to graphic design and social media marketing, our team delivers
+              high-quality solutions tailored to our clients' unique needs.
             </p>
           </div>
           
-          <div className="portfolio-filter">
-            <button 
-              className={`filter-btn ${filter === 'all' ? 'active' : ''}`} 
-              onClick={() => setFilter('all')}
-            >
-              All Projects
-            </button>
-            <button 
-              className={`filter-btn ${filter === 'web' ? 'active' : ''}`} 
-              onClick={() => setFilter('web')}
-            >
-              Web Development
-            </button>
-            <button 
-              className={`filter-btn ${filter === 'mobile' ? 'active' : ''}`} 
-              onClick={() => setFilter('mobile')}
-            >
-              Mobile Apps
-            </button>
-            <button 
-              className={`filter-btn ${filter === 'graphic' ? 'active' : ''}`} 
-              onClick={() => setFilter('graphic')}
-            >
-              Graphic Design
-            </button>
-            <button 
-              className={`filter-btn ${filter === 'marketing' ? 'active' : ''}`} 
-              onClick={() => setFilter('marketing')}
-            >
-              Marketing
-            </button>
-          </div>
+          {/* Category filter */}
+          {availableCategories.length > 0 && (
+            <div className="portfolio-filter">
+              <button 
+                className={filter === 'all' ? 'active' : ''} 
+                onClick={() => setFilter('all')}
+              >
+                All
+              </button>
+              {availableCategories.map(category => (
+                <button 
+                  key={category}
+                  className={filter === category ? 'active' : ''} 
+                  onClick={() => setFilter(category)}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          )}
           
-          <div className="portfolio-grid">
-            {filteredItems.map(item => (
-              <div className="portfolio-card" key={item.id}>
-                <div className="portfolio-card-image">
-                  <img src={item.image} alt={item.title} />
-                </div>
-                <div className="portfolio-card-content" style={{ backgroundColor: item.bgColor }}>
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                  <a href="#" className="view-details">View Details</a>
-                </div>
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <div className="loading-container">
+              <p>Loading portfolio items...</p>
+            </div>
+          ) : error ? (
+            <div className="error-container">
+              <p>{error}</p>
+            </div>
+          ) : portfolioItems.length === 0 ? (
+            <div className="empty-container">
+              <p>No portfolio items found. Please check back later.</p>
+            </div>
+          ) : (
+            <div className="portfolio-grid">
+              {filteredItems.map(item => (
+                <PortfolioCard key={item._id} item={item} />
+              ))}
+            </div>
+          )}
           
-         
+          <div className="portfolio-cta">
+            <h3>Need a Custom Solution?</h3>
+            <p>Contact us to discuss how our expertise can help bring your vision to life.</p>
+            <button className="contact-btn">Contact Us</button>
+          </div>
         </div>
       </section>
     </>

@@ -4,7 +4,7 @@ import './Banner.css';
 const Banner: React.FC = () => {
   return (
     <div className="banner">
-      <div className="container">
+      <div className="">
         <div className="banner-content">
           <h1>
             <span className="text-white">Digitalize</span> your<br />

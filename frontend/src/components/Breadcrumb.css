@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: -66px; /* To account for the navbar height */
+  margin-top: -2px; /* To account for the navbar height */
 }
 
 .breadcrumb-overlay {

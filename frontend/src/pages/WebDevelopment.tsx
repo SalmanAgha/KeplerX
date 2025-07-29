@@ -42,109 +42,107 @@ const WebDevelopment: React.FC = () => {
       />
       
       <section className="web-dev-section">
-        <div className="container">
+        <div className="">
           <div className="web-dev-intro">
-            <h2>Custom Web Development Solutions</h2>
+            <h2>Web Technologies</h2>
             <p>
-              We provide end-to-end web development services tailored to your business needs. 
-              Our team of experienced developers creates scalable, secure, and high-performance 
-              web applications using the latest technologies and best practices.
+            Building, creating, and maintaining websites and web apps are all included in web development. Numerous jobs are involved in this process, such as designing, coding, and performance and functionality optimization. We provide services in other sectors too such as top e commerce SEO services in USA and real estate website SEO in USA.
             </p>
           </div>
           
           <div className="webdev-services-grid">
             <div className="webdev-card">
-              <img src="/path/to/react-icon.png" alt="React Development" />
+              <img src="/images/react.webp" alt="React Development" />
               <h3>React Development</h3>
               <p>Build dynamic, responsive user interfaces with React, the popular JavaScript library for creating interactive web applications.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/angular-icon.png" alt="Angular Development" />
+              <img src="/images/angular.webp" alt="Angular Development" />
               <h3>Angular Development</h3>
               <p>Develop robust enterprise-grade applications with Angular, Google's powerful framework for building scalable web applications.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/vue-icon.png" alt="Vue.js Development" />
+              <img src="/images/vue.png" alt="Vue.js Development" />
               <h3>Vue.js Development</h3>
               <p>Create lightweight, progressive web applications with Vue.js, the approachable yet powerful JavaScript framework.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/node-icon.png" alt="Node.js Development" />
+              <img src="/images/node.png" alt="Node.js Development" />
               <h3>Node.js Development</h3>
               <p>Build fast, scalable server-side applications with Node.js, the JavaScript runtime built on Chrome's V8 JavaScript engine.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/php-icon.png" alt="PHP Development" />
+              <img src="/images/php.webp" alt="PHP Development" />
               <h3>PHP Development</h3>
               <p>Develop dynamic web applications with PHP, one of the most popular server-side scripting languages for web development.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/laravel-icon.png" alt="Laravel Development" />
+              <img src="/images/laravel.webp" alt="Laravel Development" />
               <h3>Laravel Development</h3>
               <p>Create elegant web applications with Laravel, the PHP framework known for its expressive syntax and robust features.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/wordpress-icon.png" alt="WordPress Development" />
+              <img src="/images/wordpress.webp" alt="WordPress Development" />
               <h3>WordPress Development</h3>
               <p>Build custom websites and blogs with WordPress, the world's most popular content management system powering over 40% of the web.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/shopify-icon.png" alt="Shopify Development" />
+              <img src="/images/shopify.png" alt="Shopify Development" />
               <h3>Shopify Development</h3>
               <p>Create custom e-commerce stores with Shopify, the leading platform for online stores and retail point-of-sale systems.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/magento-icon.png" alt="Magento Development" />
+              <img src="/images/magento.png" alt="Magento Development" />
               <h3>Magento Development</h3>
               <p>Build powerful e-commerce solutions with Magento, the flexible platform designed for enterprise-level online stores.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/woocommerce-icon.png" alt="WooCommerce Development" />
+              <img src="/images/woo.png" alt="WooCommerce Development" />
               <h3>WooCommerce Development</h3>
               <p>Develop customizable e-commerce websites with WooCommerce, the popular WordPress plugin for online selling.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/api-icon.png" alt="API Development" />
+              <img src="/images/api.png" alt="API Development" />
               <h3>API Development</h3>
               <p>Create robust APIs that enable seamless integration between different software applications and services.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/database-icon.png" alt="Database Design" />
-              <h3>Database Design</h3>
+              <img src="/images/python.webp" alt="Python" />
+              <h3>Python</h3>
               <p>Design efficient, scalable database structures that optimize data storage and retrieval for your web applications.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/responsive-icon.png" alt="Responsive Design" />
+              <img src="/images/responsive.png" alt="Responsive Design" />
               <h3>Responsive Design</h3>
               <p>Create websites that look and function beautifully across all devices, from desktops to smartphones and tablets.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/performance-icon.png" alt="Performance Optimization" />
+              <img src="/images/speed.png" alt="Performance Optimization" />
               <h3>Performance Optimization</h3>
               <p>Improve your website's speed and efficiency with our expert performance optimization services.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/security-icon.png" alt="Security Implementation" />
+              <img src="/images/security.png" alt="Security Implementation" />
               <h3>Security Implementation</h3>
               <p>Protect your web applications from threats with our comprehensive security implementation services.</p>
             </div>
             
             <div className="webdev-card">
-              <img src="/path/to/maintenance-icon.png" alt="Maintenance & Support" />
+              <img src="/images/maintenance.png" alt="Maintenance & Support" />
               <h3>Maintenance & Support</h3>
               <p>Keep your web applications running smoothly with our ongoing maintenance and support services.</p>
             </div>

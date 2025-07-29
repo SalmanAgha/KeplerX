@@ -12,6 +12,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+a{
+  text-decoration: none!important;
+ 
+}
+
 @media screen and (max-width: 768px) {
   body {
     padding-left: 20px;
@@ -25,7 +30,7 @@ code {
 }
 
 .container {
-  width: 100%;
+  width: 1600px !important;
   max-width: 100%;
   padding-left: 0;
   padding-right: 0;

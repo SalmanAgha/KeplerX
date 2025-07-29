@@ -1,11 +1,63 @@
-import React, { useState } from 'react';
-import './Finance.css';
+import React, { useState, useEffect } from 'react';
+import '../styles/PortfolioCommon.css';
 import Breadcrumb from '../components/Breadcrumb';
+import IndustryPortfolioCard from '../components/IndustryPortfolioCard';
+
+interface PortfolioItem {
+  _id: string;
+  title: string;
+  categories: string[];
+  displayCategories: string[];
+  client: string;
+  date: string;
+  description: string;
+  image: string;
+  bgColor?: string;
+}
 
 const Finance: React.FC = () => {
   const [filter, setFilter] = useState('all');
+  const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
-  const financeItems = [
+  // Categories that match this industry
+  const industryCategories = ['finance', 'Finance', 'banking', 'fintech', 'financial', 'investment', 'insurance', 'trading'];
+  
+  useEffect(() => {
+    const fetchPortfolios = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:5000/api/portfolio');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        // Filter for finance category items only
+        const financeItems = data.filter((item: PortfolioItem) => 
+          item.categories.some(category => 
+            industryCategories.includes(category)
+          ) ||
+          (item.displayCategories && item.displayCategories.some(category => 
+            industryCategories.includes(category)
+          ))
+        );
+        
+        setPortfolioItems(financeItems);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching portfolios:', err);
+        setError('Failed to load portfolio items. Please try again later.');
+        setLoading(false);
+      }
+    };
+    
+    fetchPortfolios();
+  }, []);
+  
+  // Fallback to sample data if no portfolios found from API
+  const financeServices = [
     {
       id: 1,
       title: 'Banking Applications',
@@ -37,44 +89,29 @@ const Finance: React.FC = () => {
       image: 'https://picsum.photos/id/39/600/400',
       description: 'Comprehensive wealth management platforms that help clients manage and grow their assets.',
       bgColor: '#4a2d1a'
-    },
-    {
-      id: 5,
-      title: 'Insurance Systems',
-      category: 'insurance',
-      image: 'https://picsum.photos/id/40/600/400',
-      description: 'Robust insurance management systems that streamline policy administration and claims processing.',
-      bgColor: '#2d4a3a'
-    },
-    {
-      id: 6,
-      title: 'Investment Platforms',
-      category: 'management',
-      image: 'https://picsum.photos/id/41/600/400',
-      description: 'User-friendly investment platforms that enable users to manage their investment portfolios.',
-      bgColor: '#4a1a2d'
-    },
-    {
-      id: 7,
-      title: 'Trading Systems',
-      category: 'trading',
-      image: 'https://picsum.photos/id/42/600/400',
-      description: 'Advanced trading systems with real-time data, analytics, and automated trading capabilities.',
-      bgColor: '#1a4a3d'
-    },
-    {
-      id: 8,
-      title: 'Fintech Solutions',
-      category: 'banking',
-      image: 'https://picsum.photos/id/43/600/400',
-      description: 'Innovative fintech solutions that leverage technology to improve financial services and customer experience.',
-      bgColor: '#3a1a4a'
     }
   ];
   
+  // Use either the API-sourced portfolios or sample data if none found
+  const displayItems = portfolioItems.length > 0 ? portfolioItems : financeServices.map(item => ({
+    _id: item.id.toString(),
+    title: item.title,
+    categories: [item.category],
+    displayCategories: [item.category],
+    client: 'Sample Client',
+    date: new Date().toISOString(),
+    description: item.description,
+    image: item.image,
+    bgColor: item.bgColor
+  }));
+  
+  // Filter based on subcategory if needed
   const filteredItems = filter === 'all' 
-    ? financeItems 
-    : financeItems.filter(item => item.category === filter);
+    ? displayItems 
+    : displayItems.filter(item => 
+        item.categories.includes(filter) || 
+        (item.displayCategories && item.displayCategories.includes(filter))
+      );
   
   return (
     <>
@@ -84,7 +121,7 @@ const Finance: React.FC = () => {
       />
       
       <section className="finance-section">
-        <div className="container">
+        <div className="">
           <div className="finance-intro">
             <h2>Financial Solutions</h2>
             <p>
@@ -93,22 +130,21 @@ const Finance: React.FC = () => {
             </p>
           </div>
           
-        
-          
-          <div className="finance-grid">
-            {filteredItems.map(item => (
-              <div className="finance-card" key={item.id}>
-                <div className="finance-card-image">
-                  <img src={item.image} alt={item.title} />
-                </div>
-                <div className="finance-card-content" style={{ backgroundColor: item.bgColor }}>
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                  <a href="#" className="view-details">View Details</a>
-                </div>
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <div className="loading-container">
+              <p>Loading portfolio items...</p>
+            </div>
+          ) : error ? (
+            <div className="error-container">
+              <p>{error}</p>
+            </div>
+          ) : (
+            <div className="portfolio-grid">
+              {filteredItems.map(item => (
+                <IndustryPortfolioCard key={item._id} item={item} industryName="Finance" />
+              ))}
+            </div>
+          )}
           
           <div className="finance-cta">
             <h3>Looking for financial technology solutions?</h3>

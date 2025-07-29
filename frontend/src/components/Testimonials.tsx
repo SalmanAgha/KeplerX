@@ -5,13 +5,59 @@ import 'slick-carousel/slick/slick-theme.css';
 import './Testimonials.css';
 
 const Testimonials: React.FC = () => {
-  const testimonials = Array.from({ length: 8 }, (_, index) => ({
-    logo: `/path/to/logo${index + 1}.png`,
-    websiteName: `Website Name ${index + 1}`,
-    serviceName: 'Service Name',
-    description: `This is a description of the testimonial for client ${index + 1}.`,
-    rating: '★★★★★',
-  }));
+  // Replaced dummy data with real testimonials
+  const testimonials = [
+    {
+      logo: "/images/friends.webp",
+      websiteName: "Friends Marketing",
+      serviceName: "Web Development",
+      description: "The website KeplerX designed for us is a game-changer. It’s fast, intuitive, and perfectly aligned with our brand.",
+      rating: "★★★★★",
+    },
+    {
+      logo: "/images/baraat.webp",
+      websiteName: "Baraat Catering ",
+      serviceName: "SEO",
+      description: "KeplerX’s SEO strategies took us from page three to the top of Google search results, drastically increasing our organic traffic.",
+      rating: "★★★★★",
+    },
+    {
+      logo: "/images/skyblue.webp",
+      websiteName: "SkyBlue Immigration",
+      serviceName: "Web Development",
+      description: "Our new website by KeplerX is not just beautiful, but it’s also optimized for mobile and delivers a seamless user experience.",
+      rating: "★★★★★",
+    },
+    {
+      logo: "/images/techmender.png",
+      websiteName: "Tech Mender",
+      serviceName: "Web Development",
+      description: "KeplerX’s social media campaigns are spot-on. They’ve helped us connect with our audience in a way we never could before.",
+      rating: "★★★★★",
+    },
+    {
+      logo: "/images/canvas.webp",
+      websiteName: "The Canvas Farm",
+      serviceName: "SEO",
+      description: "KeplerX took our SEO to the next level, boosting our site’s visibility and driving more qualified leads than ever.",
+      rating: "★★★★★",
+    },
+    {
+      logo: "/images/taj.png",
+      websiteName: "Taj Gasoline",
+      serviceName: "Web Development",
+      description: "KeplerX built us a sleek, user-friendly website that not only looks great but has significantly improved our conversion rates.",
+      rating: "★★★★★",
+    },
+    {
+      logo: "/images/dedu.webp",
+      websiteName: "Deducationist",
+      serviceName: "Social Media Marketing",
+      description: "Thanks to KeplerX’s social media expertise, our engagement has soared, and our follower count has grown by 50% in just two months.",
+      rating: "★★★★★",
+    },
+    
+  ];
 
   const [settings, setSettings] = useState({
     dots: true,

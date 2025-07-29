@@ -1,6 +1,6 @@
 .why-choose-section {
   background-color: #f9f9f9;
-  padding: 60px 0;
+  padding: 60px 50px;
 }
 
 .why-choose-container {
@@ -145,6 +145,11 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
   }
+
+  .why-choose-section {
+    padding: 25px;
+  }
+
 }
 
 @media (max-width: 576px) {

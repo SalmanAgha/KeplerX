@@ -3,10 +3,17 @@ import React, { useState, useEffect } from 'react';
 import './Navbar.css'; // Create this file for custom styles
 import logo from '../assets/Images/logo.webp'; // Update the path
 import EnquiryOffCanvas from './EnquiryOffCanvas';
+import RegionSelectorModal from './RegionSelectorModal';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  onEnquireClick: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onEnquireClick }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
+  const [isRegionOpen, setIsRegionOpen] = useState(false);
+  const [regionModalView, setRegionModalView] = useState<'both' | 'region' | 'offer'>('region');
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
 
   const toggleMenu = () => {
@@ -21,6 +28,20 @@ const Navbar: React.FC = () => {
     e.preventDefault();
     e.stopPropagation();
     setIsEnquiryOpen(!isEnquiryOpen);
+  };
+
+  const openRegionCards = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setRegionModalView('region');
+    setIsRegionOpen(true);
+  };
+
+  const openFreeOffer = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setRegionModalView('offer');
+    setIsRegionOpen(true);
   };
 
   const toggleDropdown = (index: number, e: React.MouseEvent) => {
@@ -97,18 +118,36 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
+  // Show popup (both sections) every time home page is loaded/navigated to
+  useEffect(() => {
+    const maybeShowHomePopup = () => {
+      if (window.location.pathname === '/') {
+        setRegionModalView('both');
+        setIsRegionOpen(true);
+      }
+    };
+
+    maybeShowHomePopup(); // initial load
+    window.addEventListener('popstate', maybeShowHomePopup);
+    return () => {
+      window.removeEventListener('popstate', maybeShowHomePopup);
+    };
+  }, []);
+
   return (
     <>
       <div className="top-bar bg-teal text-white ">
         <div className="container d-flex justify-content-between">
           <a href="#" className="text-white">Download E-Profile</a>
           <div className='top-bar-menu'>
-            <a href="#" className="text-white mx-2">Free Offers</a>
-            <a href="#" className="text-white mx-2">Region</a>
+            <a href="#" className="text-white mx-2" onClick={openFreeOffer}>Free Offers</a>
+            <a href="#" className="text-white mx-2" onClick={openRegionCards}>Region</a>
             <a href="#" className="text-white mx-2">Call Now</a>
             <a href="#" className="text-white mx-2">Let's Chat Now</a>
             <a href="#" className="text-white mx-2 enquire-now-link" onClick={toggleEnquiry}>Enquire Now</a>
-            <a href="/admin/dashboard" className="text-white mx-2" onClick={(e) => handleNavigation(e, '/admin/dashboard')}>Admin</a>
+            <a href="/admin/dashboard" className="text-white mx-2 admin-link" onClick={(e) => handleNavigation(e, '/admin/dashboard')}>
+              <i className="fas fa-user-shield me-1"></i> Admin
+            </a>
           </div>
         </div>
       </div>
@@ -139,13 +178,16 @@ const Navbar: React.FC = () => {
                 <a className="nav-link dropdown-toggle" href="/services" onClick={(e) => toggleDropdown(0, e)}>Services</a>
                 <div className="dropdown-menu">
                   <a className="dropdown-item" href="/services/web-development" onClick={(e) => handleNavigation(e, '/services/web-development')}>Web Development</a>
-                  <a className="dropdown-item" href="/services/graphic-designing" onClick={(e) => handleNavigation(e, '/services/graphic-designing')}>Graphic Designing</a>
-                  <a className="dropdown-item" href="/services/mobile-development" onClick={(e) => handleNavigation(e, '/services/mobile-development')}>Mobile Development</a>
-                  <a className="dropdown-item" href="/services/ui-ux-design" onClick={(e) => handleNavigation(e, '/services/ui-ux-design')}>UI/UX Design</a>
+                  <a className="dropdown-item" href="/services/app-development" onClick={(e) => handleNavigation(e, '/services/app-development')}>App Development</a>
+                  <a className="dropdown-item" href="/services/ai-services" onClick={(e) => handleNavigation(e, '/services/ai-services')}>AI Services</a>
                 </div>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/portfolio" onClick={(e) => handleNavigation(e, '/portfolio')}>Portfolio</a>
+                <a className="nav-link dropdown-toggle" href="/portfolio" onClick={(e) => toggleDropdown(2, e)}>Portfolio</a>
+                <div className="dropdown-menu">
+                  <a className="dropdown-item" href="/portfolio/web-development" onClick={(e) => handleNavigation(e, '/portfolio/web-development')}>Web Development</a>
+                  <a className="dropdown-item" href="/portfolio/app-development" onClick={(e) => handleNavigation(e, '/portfolio/app-development')}>App Development</a>
+                </div>
               </li>
               <li className={`nav-item ${activeDropdown === 1 ? 'show' : ''}`}>
                 <a className="nav-link dropdown-toggle" href="/industries" onClick={(e) => toggleDropdown(1, e)}>Core Industries</a>
@@ -156,6 +198,12 @@ const Navbar: React.FC = () => {
                   <a className="dropdown-item" href="/industries/finance" onClick={(e) => handleNavigation(e, '/industries/finance')}>Finance</a>
                   <a className="dropdown-item" href="/industries/ecommerce" onClick={(e) => handleNavigation(e, '/industries/ecommerce')}>E-commerce</a>
                   <a className="dropdown-item" href="/industries/corporate" onClick={(e) => handleNavigation(e, '/industries/corporate')}>Corporate</a>
+                  <a className="dropdown-item" href="/industries/food" onClick={(e) => handleNavigation(e, '/industries/food')}>Food</a>
+                  <a className="dropdown-item" href="/industries/automotive" onClick={(e) => handleNavigation(e, '/industries/automotive')}>Automotive</a>
+                  <a className="dropdown-item" href="/industries/petroleum" onClick={(e) => handleNavigation(e, '/industries/petroleum')}>Petroleum</a>
+                  <a className="dropdown-item" href="/industries/fitness" onClick={(e) => handleNavigation(e, '/industries/fitness')}>Fitness</a>
+                  <a className="dropdown-item" href="/industries/it" onClick={(e) => handleNavigation(e, '/industries/it')}>Information Technology</a>
+                  <a className="dropdown-item" href="/industries/jewellery" onClick={(e) => handleNavigation(e, '/industries/jewellery')}>Jewellery</a>
                 </div>
               </li>
               <li className="nav-item">
@@ -184,13 +232,16 @@ const Navbar: React.FC = () => {
             <a className="nav-link dropdown-toggle" href="/services" onClick={(e) => toggleDropdown(0, e)}>Services</a>
             <div className="dropdown-menu">
               <a className="dropdown-item" href="/services/web-development" onClick={(e) => handleNavigation(e, '/services/web-development')}>Web Development</a>
-              <a className="dropdown-item" href="/services/graphic-designing" onClick={(e) => handleNavigation(e, '/services/graphic-designing')}>Graphic Designing</a>
-              <a className="dropdown-item" href="/services/mobile-development" onClick={(e) => handleNavigation(e, '/services/mobile-development')}>Mobile Development</a>
-              <a className="dropdown-item" href="/services/ui-ux-design" onClick={(e) => handleNavigation(e, '/services/ui-ux-design')}>UI/UX Design</a>
+              <a className="dropdown-item" href="/services/app-development" onClick={(e) => handleNavigation(e, '/services/app-development')}>App Development</a>
+              <a className="dropdown-item" href="/services/ai-services" onClick={(e) => handleNavigation(e, '/services/ai-services')}>AI Services</a>
             </div>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/portfolio" onClick={(e) => handleNavigation(e, '/portfolio')}>Portfolio</a>
+            <a className="nav-link dropdown-toggle" href="/portfolio" onClick={(e) => toggleDropdown(2, e)}>Portfolio</a>
+            <div className="dropdown-menu">
+              <a className="dropdown-item" href="/portfolio/web-development" onClick={(e) => handleNavigation(e, '/portfolio/web-development')}>Web Development</a>
+              <a className="dropdown-item" href="/portfolio/app-development" onClick={(e) => handleNavigation(e, '/portfolio/app-development')}>App Development</a>
+            </div>
           </li>
           <li className={`nav-item ${activeDropdown === 1 ? 'show' : ''}`}>
             <a className="nav-link dropdown-toggle" href="/industries" onClick={(e) => toggleDropdown(1, e)}>Core Industries</a>
@@ -201,6 +252,12 @@ const Navbar: React.FC = () => {
               <a className="dropdown-item" href="/industries/finance" onClick={(e) => handleNavigation(e, '/industries/finance')}>Finance</a>
               <a className="dropdown-item" href="/industries/ecommerce" onClick={(e) => handleNavigation(e, '/industries/ecommerce')}>E-commerce</a>
               <a className="dropdown-item" href="/industries/corporate" onClick={(e) => handleNavigation(e, '/industries/corporate')}>Corporate</a>
+              <a className="dropdown-item" href="/industries/food" onClick={(e) => handleNavigation(e, '/industries/food')}>Food</a>
+              <a className="dropdown-item" href="/industries/automotive" onClick={(e) => handleNavigation(e, '/industries/automotive')}>Automotive</a>
+              <a className="dropdown-item" href="/industries/petroleum" onClick={(e) => handleNavigation(e, '/industries/petroleum')}>Petroleum</a>
+              <a className="dropdown-item" href="/industries/fitness" onClick={(e) => handleNavigation(e, '/industries/fitness')}>Fitness</a>
+              <a className="dropdown-item" href="/industries/it" onClick={(e) => handleNavigation(e, '/industries/it')}>Information Technology</a>
+              <a className="dropdown-item" href="/industries/jewellery" onClick={(e) => handleNavigation(e, '/industries/jewellery')}>Jewellery</a>
             </div>
           </li>
           <li className="nav-item">
@@ -215,6 +272,11 @@ const Navbar: React.FC = () => {
         </ul>
       </div>
       <EnquiryOffCanvas isOpen={isEnquiryOpen} onClose={() => setIsEnquiryOpen(false)} />
+      <RegionSelectorModal 
+        isOpen={isRegionOpen} 
+        view={regionModalView}
+        onClose={() => setIsRegionOpen(false)}
+      />
     </>
   );
 };

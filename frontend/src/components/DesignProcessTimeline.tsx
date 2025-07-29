@@ -1,68 +1,88 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './DesignProcessTimeline.css';
 
 const DesignProcessTimeline: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const timelineData = [
+    {
+      title: "Discovery",
+      icon: "https://cdn-icons-png.flaticon.com/512/4727/4727419.png",
+      description: [
+        "Research & Analysis",
+        "User Interviews",
+        "Market Research",
+        "Requirements Gathering"
+      ]
+    },
+    {
+      title: "Concept Development",
+      icon: "https://cdn-icons-png.flaticon.com/512/9967/9967577.png",
+      description: [
+        "Sketching & Ideation",
+        "Wireframing",
+        "User Flow Design",
+        "Initial Concepts"
+      ]
+    },
+    {
+      title: "Design Execution",
+      icon: "https://cdn-icons-png.flaticon.com/512/3159/3159310.png",
+      description: [
+        "Visual Design",
+        "UI Components",
+        "Design System",
+        "Prototyping"
+      ]
+    },
+    {
+      title: "Delivery",
+      icon: "https://cdn-icons-png.flaticon.com/512/9967/9967577.png",
+      description: [
+        "Design Handoff",
+        "Documentation",
+        "Implementation Support",
+        "Design QA"
+      ]
+    }
+  ];
+
   return (
-    <div className="design-process-timeline">
-      <h2 className="timeline-title">Our Design Process</h2>
-      <div className="timeline-container">
-        <div className="timeline-line"></div>
-        
-        <div className="timeline-stage">
-          <div className="timeline-dot"></div>
-          <div className="timeline-content">
-            <div className="timeline-icon">
-              <img src="https://cdn-icons-png.flaticon.com/512/2620/2620253.png" alt="Discovery" />
+    <div className="design-timeline-wrapper">
+      <div className="design-timeline-header">
+        <h2 className="design-timeline-title">Our Design Process</h2>
+        <p className="design-timeline-subtitle">A systematic approach to creating exceptional designs</p>
+      </div>
+
+      <div className="design-timeline-container">
+        {timelineData.map((item, index) => (
+          <div 
+            key={index} 
+            className="design-timeline-step"
+            style={{
+              animationDelay: `${index * 0.2}s`
+            }}
+          >
+            <div className="design-timeline-card">
+              <div className="design-timeline-icon-wrapper">
+                <img src={item.icon} alt={item.title} className="design-timeline-icon" />
+              </div>
+              <h3 className="design-timeline-step-title">{item.title}</h3>
+              <div className="design-timeline-details">
+                {item.description.map((desc, i) => (
+                  <p key={i} className="design-timeline-detail-item">
+                    {desc}
+                  </p>
+                ))}
+              </div>
             </div>
-            <h3 className="timeline-stage-title">Discovery</h3>
-            <div className="timeline-details">
-              <p>Client consultation | Brand analysis |</p>
-              <p>Target audience research | Competitor analysis</p>
-            </div>
+            <div className="design-timeline-point"></div>
           </div>
-        </div>
-        
-        <div className="timeline-stage">
-          <div className="timeline-dot"></div>
-          <div className="timeline-content">
-            <div className="timeline-icon">
-              <img src="https://cdn-icons-png.flaticon.com/512/3176/3176384.png" alt="Concept Development" />
-            </div>
-            <h3 className="timeline-stage-title">Concept Development</h3>
-            <div className="timeline-details">
-              <p>Sketching | Mood boards | Initial concepts |</p>
-              <p>Client feedback | Concept refinement</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="timeline-stage">
-          <div className="timeline-dot"></div>
-          <div className="timeline-content">
-            <div className="timeline-icon">
-              <img src="https://cdn-icons-png.flaticon.com/512/3659/3659899.png" alt="Design Execution" />
-            </div>
-            <h3 className="timeline-stage-title">Design Execution</h3>
-            <div className="timeline-details">
-              <p>Digital design | Color refinement | Typography |</p>
-              <p>Layout finalization | Client review</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="timeline-stage">
-          <div className="timeline-dot"></div>
-          <div className="timeline-content">
-            <div className="timeline-icon">
-              <img src="https://cdn-icons-png.flaticon.com/512/2875/2875438.png" alt="Delivery" />
-            </div>
-            <h3 className="timeline-stage-title">Delivery</h3>
-            <div className="timeline-details">
-              <p>Final adjustments | File preparation |</p>
-              <p>Asset delivery | Implementation support</p>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

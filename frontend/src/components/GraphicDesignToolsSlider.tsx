@@ -34,7 +34,6 @@ const GraphicDesignToolsSlider: React.FC = () => {
   return (
     <div className="design-tools-section">
       <h2 className="design-tools-title">DESIGN TOOLS WE MASTER</h2>
-      <div className="title-underline"></div>
       <div className="design-tools-slider-container">
         <div className="design-tools-slider">
           {logoElements}

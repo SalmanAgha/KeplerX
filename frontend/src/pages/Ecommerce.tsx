@@ -1,118 +1,155 @@
-import React, { useState } from 'react';
-import './Ecommerce.css';
+import React, { useState, useEffect } from 'react';
+import '../styles/PortfolioCommon.css';
 import Breadcrumb from '../components/Breadcrumb';
+import IndustryPortfolioCard from '../components/IndustryPortfolioCard';
+
+interface PortfolioItem {
+  _id: string;
+  title: string;
+  categories: string[];
+  displayCategories: string[];
+  client: string;
+  date: string;
+  description: string;
+  image: string;
+  bgColor?: string;
+}
 
 const Ecommerce: React.FC = () => {
   const [filter, setFilter] = useState('all');
+  const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
-  const ecommerceItems = [
+  // Categories that match this industry
+  const industryCategories = ['ecommerce', 'Ecommerce', 'e-commerce', 'E-commerce', 'shop', 'retail', 'Store'];
+  
+  useEffect(() => {
+    const fetchPortfolios = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:5000/api/portfolio');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        // Filter for ecommerce category items only
+        const ecommerceItems = data.filter((item: PortfolioItem) => 
+          item.categories.some(category => 
+            industryCategories.includes(category)
+          ) ||
+          (item.displayCategories && item.displayCategories.some(category => 
+            industryCategories.includes(category)
+          ))
+        );
+        
+        setPortfolioItems(ecommerceItems);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching portfolios:', err);
+        setError('Failed to load portfolio items. Please try again later.');
+        setLoading(false);
+      }
+    };
+    
+    fetchPortfolios();
+  }, []);
+  
+  // Fallback to sample data if no portfolios found from API
+  const ecommerceServices = [
     {
       id: 1,
-      title: 'E-commerce Platforms',
-      category: 'platforms',
-      image: 'https://picsum.photos/id/44/600/400',
-      description: 'Custom-built e-commerce platforms designed to showcase products and streamline online sales.',
+      title: 'Online Store Development',
+      category: 'store',
+      image: 'https://picsum.photos/id/96/600/400',
+      description: 'Custom online store development with seamless shopping experience and secure payment processing.',
       bgColor: '#2d2150'
     },
     {
       id: 2,
-      title: 'Payment Integration',
-      category: 'payment',
-      image: 'https://picsum.photos/id/45/600/400',
-      description: 'Seamless payment gateway integrations supporting multiple payment methods and currencies.',
+      title: 'Product Catalog Management',
+      category: 'catalog',
+      image: 'https://picsum.photos/id/94/600/400',
+      description: 'Comprehensive product catalog management solutions with advanced filtering and search capabilities.',
       bgColor: '#1a3a4a'
     },
     {
       id: 3,
-      title: 'Product Catalogs',
-      category: 'catalogs',
-      image: 'https://picsum.photos/id/46/600/400',
-      description: 'Flexible and searchable product catalogs with filtering options and detailed product information.',
+      title: 'Payment Gateway Integration',
+      category: 'payment',
+      image: 'https://picsum.photos/id/91/600/400',
+      description: 'Secure payment gateway integration supporting multiple payment methods and currencies.',
       bgColor: '#3d2d5c'
     },
     {
       id: 4,
-      title: 'Shopping Cart Systems',
-      category: 'cart',
-      image: 'https://picsum.photos/id/47/600/400',
-      description: 'User-friendly shopping cart systems that streamline the checkout process and reduce abandonment.',
-      bgColor: '#4a2d1a'
-    },
-    {
-      id: 5,
       title: 'Inventory Management',
-      category: 'management',
-      image: 'https://picsum.photos/id/48/600/400',
-      description: 'Real-time inventory tracking and management systems that prevent overselling and stockouts.',
-      bgColor: '#2d4a3a'
-    },
-    {
-      id: 6,
-      title: 'Customer Accounts',
-      category: 'customers',
-      image: 'https://picsum.photos/id/49/600/400',
-      description: 'Personalized customer account systems with order history, wishlist, and profile management.',
-      bgColor: '#4a1a2d'
-    },
-    {
-      id: 7,
-      title: 'Mobile Shopping',
-      category: 'mobile',
-      image: 'https://picsum.photos/id/50/600/400',
-      description: 'Mobile-optimized shopping experiences that enable customers to shop on-the-go from any device.',
-      bgColor: '#1a4a3d'
-    },
-    {
-      id: 8,
-      title: 'Analytics Dashboard',
-      category: 'analytics',
-      image: 'https://picsum.photos/id/51/600/400',
-      description: 'Comprehensive analytics dashboards that provide insights into sales, customer behavior, and trends.',
-      bgColor: '#3a1a4a'
+      category: 'inventory',
+      image: 'https://picsum.photos/id/92/600/400',
+      description: 'Real-time inventory management systems that sync across all sales channels and warehouses.',
+      bgColor: '#4a2d1a'
     }
   ];
   
+  // Use either the API-sourced portfolios or sample data if none found
+  const displayItems = portfolioItems.length > 0 ? portfolioItems : ecommerceServices.map(item => ({
+    _id: item.id.toString(),
+    title: item.title,
+    categories: [item.category],
+    displayCategories: [item.category],
+    client: 'Sample Client',
+    date: new Date().toISOString(),
+    description: item.description,
+    image: item.image,
+    bgColor: item.bgColor
+  }));
+  
+  // Filter based on subcategory if needed
   const filteredItems = filter === 'all' 
-    ? ecommerceItems 
-    : ecommerceItems.filter(item => item.category === filter);
+    ? displayItems 
+    : displayItems.filter(item => 
+        item.categories.includes(filter) || 
+        (item.displayCategories && item.displayCategories.includes(filter))
+      );
   
   return (
     <>
       <Breadcrumb 
-        title="E-commerce" 
-        path={['Home', 'Core Industries', 'E-commerce']} 
+        title="Ecommerce" 
+        path={['Home', 'Core Industries', 'Ecommerce']} 
       />
       
       <section className="ecommerce-section">
-        <div className="container">
+        <div className="">
           <div className="ecommerce-intro">
-            <h2>E-commerce Solutions</h2>
+            <h2>Ecommerce Solutions</h2>
             <p>
-              We develop custom e-commerce solutions that help businesses sell their products and services online. 
-              Our expertise spans across e-commerce platforms, payment integrations, product catalogs, and inventory management systems.
+              We create powerful ecommerce solutions that drive online sales and enhance the customer shopping experience.
+              Our expertise includes custom online store development, product catalog management, payment gateway integration,
+              and inventory management systems.
             </p>
           </div>
           
-          
-          
-          <div className="ecommerce-grid">
-            {filteredItems.map(item => (
-              <div className="ecommerce-card" key={item.id}>
-                <div className="ecommerce-card-image">
-                  <img src={item.image} alt={item.title} />
-                </div>
-                <div className="ecommerce-card-content" style={{ backgroundColor: item.bgColor }}>
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                  <a href="#" className="view-details">View Details</a>
-                </div>
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <div className="loading-container">
+              <p>Loading portfolio items...</p>
+            </div>
+          ) : error ? (
+            <div className="error-container">
+              <p>{error}</p>
+            </div>
+          ) : (
+            <div className="portfolio-grid">
+              {filteredItems.map(item => (
+                <IndustryPortfolioCard key={item._id} item={item} industryName="Ecommerce" />
+              ))}
+            </div>
+          )}
           
           <div className="ecommerce-cta">
-            <h3>Start selling online today</h3>
-            <p>Contact us to discuss how our e-commerce solutions can help your business grow its online presence and sales.</p>
+            <h3>Ready to boost your online sales?</h3>
+            <p>Contact us to discuss how our ecommerce solutions can help grow your business and improve customer satisfaction.</p>
             <button className="contact-btn">Contact Us</button>
           </div>
         </div>

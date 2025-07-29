@@ -4,14 +4,13 @@ import './WhyChooseUs.css';
 const WhyChooseUs: React.FC = () => {
   return (
     <section className="why-choose-section">
-      <div className="container">
+      <div className="">
         <div className="why-choose-container">
           <div className="why-choose-left">
             <h2>Why Choose Us?</h2>
             <div className="divider"></div>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec 
-              ullamcorper mattis, pulvinar dapibus.
+            Kepler-X develops innovative marketing plans specifically suited to our client’s requirements. Our creative strategy puts your brand ahead of the competition optimizing ROI.  Kepler X promises to give its customers with Affordable SEO Services For Small Businesses in California.
             </p>
             {/* <button className="learn-more-btn">
               Learn More <span className="arrow">→</span>
@@ -27,7 +26,7 @@ const WhyChooseUs: React.FC = () => {
                 </svg>
               </div>
               <h3>Our Achievement</h3><br></br>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut.</p>
+              
             </div>
             
             <div className="achievement-stats">

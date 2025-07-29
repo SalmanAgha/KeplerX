@@ -13,7 +13,7 @@ const GraphicDesigning: React.FC = () => {
       />
       
       <section className="graphic-design-section">
-        <div className="container">
+        <div className="">
           <div className="graphic-design-intro">
             <h2>Creative Graphic Design Solutions</h2>
             <p>
@@ -25,13 +25,13 @@ const GraphicDesigning: React.FC = () => {
           
           <div className="graphic-design-services-grid">
             <div className="graphic-design-card">
-              <img src="/path/to/logo-design-icon.png" alt="Logo Design" />
+              <img src="/images/logo-design.png" alt="Logo Design" />
               <h3>Logo Design</h3>
               <p>Create a memorable brand identity with our custom logo design services that capture your brand's essence and values.</p>
             </div>
             
             <div className="graphic-design-card">
-              <img src="/path/to/branding-icon.png" alt="Branding" />
+              <img src="/images/brand.png" alt="Branding" />
               <h3>Branding</h3>
               <p>Develop a cohesive brand identity with our comprehensive branding services, including logo, color palette, typography, and brand guidelines.</p>
             </div>
@@ -43,7 +43,7 @@ const GraphicDesigning: React.FC = () => {
             </div>
             
             <div className="graphic-design-card">
-              <img src="/path/to/packaging-icon.png" alt="Packaging Design" />
+              <img src="/images/packaging-design.png" alt="Packaging Design" />
               <h3>Packaging Design</h3>
               <p>Design attractive and functional packaging that stands out on shelves and effectively communicates your product's value.</p>
             </div>
@@ -67,13 +67,13 @@ const GraphicDesigning: React.FC = () => {
             </div>
             
             <div className="graphic-design-card">
-              <img src="/path/to/ui-design-icon.png" alt="UI Design" />
+              <img src="/images/ui.png" alt="UI Design" />
               <h3>UI Design</h3>
               <p>Create intuitive and visually appealing user interfaces for websites, applications, and digital products.</p>
             </div>
             
             <div className="graphic-design-card">
-              <img src="/path/to/banner-icon.png" alt="Banner Design" />
+              <img src="/images/banner-poster.png" alt="Banner Design" />
               <h3>Banner Design</h3>
               <p>Eye-catching banner designs for websites, social media, and digital advertising campaigns that drive engagement.</p>
             </div>

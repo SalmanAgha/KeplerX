@@ -4,13 +4,13 @@
   text-align: center;
 }
 
-.testimonials-title {
-  font-size: 3rem;
-  margin-bottom: 40px;
-  font-weight: 700;
-  color: var(--primary-color);
-  text-transform: uppercase;
-}
+  .testimonials-title {
+    font-size: 3rem;
+    margin-bottom: 40px;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-transform: uppercase;
+  }
 
 .testimonial-card {
   background-color: #fff;
@@ -134,4 +134,12 @@
   .testimonials-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+ 
+
+  .testimonials-title {
+    font-size: 2rem;
+  }
+
+
+
 } 

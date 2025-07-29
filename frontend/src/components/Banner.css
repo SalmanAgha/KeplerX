@@ -40,10 +40,15 @@
 
 @media (max-width: 768px) {
     .banner-content h1 {
-        font-size: 2.5rem;
+        font-size: 3rem;
+        line-height: 1;
     }
     .banner {
         padding-left: 20px;
         padding-right: 20px;
+    }
+
+    .banner{
+        height: 70vh;
     }
 }

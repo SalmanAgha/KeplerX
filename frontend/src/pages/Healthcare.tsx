@@ -1,11 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Healthcare.css';
+import '../styles/PortfolioCommon.css';
 import Breadcrumb from '../components/Breadcrumb';
+import IndustryPortfolioCard from '../components/IndustryPortfolioCard';
+
+interface PortfolioItem {
+  _id: string;
+  title: string;
+  categories: string[];
+  displayCategories: string[];
+  client: string;
+  date: string;
+  description: string;
+  image: string;
+  bgColor?: string;
+}
 
 const Healthcare: React.FC = () => {
   const [filter, setFilter] = useState('all');
+  const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
-  const healthcareItems = [
+  // Categories that match this industry
+  const industryCategories = ['healthcare', 'Healthcare', 'medical', 'Medical', 'hospital', 'clinic', 'telemedicine', 'health'];
+  
+  useEffect(() => {
+    const fetchPortfolios = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:5000/api/portfolio');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        // Filter for healthcare category items only
+        const healthcareItems = data.filter((item: PortfolioItem) => 
+          item.categories.some(category => 
+            industryCategories.includes(category)
+          ) ||
+          (item.displayCategories && item.displayCategories.some(category => 
+            industryCategories.includes(category)
+          ))
+        );
+        
+        setPortfolioItems(healthcareItems);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching portfolios:', err);
+        setError('Failed to load portfolio items. Please try again later.');
+        setLoading(false);
+      }
+    };
+    
+    fetchPortfolios();
+  }, []);
+  
+  // Fallback to sample data if no portfolios found from API
+  const healthcareServices = [
     {
       id: 1,
       title: 'Hospitals',
@@ -37,44 +90,29 @@ const Healthcare: React.FC = () => {
       image: 'https://picsum.photos/id/23/600/400',
       description: 'Cutting-edge medical equipment and devices that enhance diagnosis, treatment, and patient monitoring.',
       bgColor: '#4a2d1a'
-    },
-    {
-      id: 5,
-      title: 'Clinics',
-      category: 'facilities',
-      image: 'https://picsum.photos/id/24/600/400',
-      description: 'Specialized medical clinics offering focused healthcare services in convenient locations.',
-      bgColor: '#2d4a3a'
-    },
-    {
-      id: 6,
-      title: 'Healthcare Management',
-      category: 'systems',
-      image: 'https://picsum.photos/id/25/600/400',
-      description: 'Comprehensive hospital and healthcare management systems that streamline operations and improve efficiency.',
-      bgColor: '#4a1a2d'
-    },
-    {
-      id: 7,
-      title: 'Patient Care',
-      category: 'systems',
-      image: 'https://picsum.photos/id/26/600/400',
-      description: 'Integrated patient care solutions that enhance the quality of healthcare delivery and patient experience.',
-      bgColor: '#1a4a3d'
-    },
-    {
-      id: 8,
-      title: 'Medical Research',
-      category: 'products',
-      image: 'https://picsum.photos/id/27/600/400',
-      description: 'Cutting-edge medical research and development facilities that pioneer healthcare innovations.',
-      bgColor: '#3a1a4a'
     }
   ];
   
+  // Use either the API-sourced portfolios or sample data if none found
+  const displayItems = portfolioItems.length > 0 ? portfolioItems : healthcareServices.map(item => ({
+    _id: item.id.toString(),
+    title: item.title,
+    categories: [item.category],
+    displayCategories: [item.category],
+    client: 'Sample Client',
+    date: new Date().toISOString(),
+    description: item.description,
+    image: item.image,
+    bgColor: item.bgColor
+  }));
+  
+  // Filter based on subcategory if needed
   const filteredItems = filter === 'all' 
-    ? healthcareItems 
-    : healthcareItems.filter(item => item.category === filter);
+    ? displayItems 
+    : displayItems.filter(item => 
+        item.categories.includes(filter) || 
+        (item.displayCategories && item.displayCategories.includes(filter))
+      );
   
   return (
     <>
@@ -84,7 +122,7 @@ const Healthcare: React.FC = () => {
       />
       
       <section className="healthcare-section">
-        <div className="container">
+        <div className="">
           <div className="healthcare-intro">
             <h2>Healthcare Solutions</h2>
             <p>
@@ -93,22 +131,21 @@ const Healthcare: React.FC = () => {
             </p>
           </div>
           
-        
-          
-          <div className="healthcare-grid">
-            {filteredItems.map(item => (
-              <div className="healthcare-card" key={item.id}>
-                <div className="healthcare-card-image">
-                  <img src={item.image} alt={item.title} />
-                </div>
-                <div className="healthcare-card-content" style={{ backgroundColor: item.bgColor }}>
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                  <a href="#" className="view-details">View Details</a>
-                </div>
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <div className="loading-container">
+              <p>Loading portfolio items...</p>
+            </div>
+          ) : error ? (
+            <div className="error-container">
+              <p>{error}</p>
+            </div>
+          ) : (
+            <div className="portfolio-grid">
+              {filteredItems.map(item => (
+                <IndustryPortfolioCard key={item._id} item={item} industryName="Healthcare" />
+              ))}
+            </div>
+          )}
           
           <div className="healthcare-cta">
             <h3>Looking for healthcare solutions?</h3>

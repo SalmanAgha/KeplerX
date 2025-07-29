@@ -4,7 +4,7 @@
 .top-bar {
   background-color: var(--primary-color);
   font-size: var(--font-small);
- padding: 10px;
+  padding: 10px;
 }
 
 .top-bar-menu a{
@@ -13,7 +13,6 @@
 
 .top-bar a{
   text-decoration: none;
- 
 }
 
 .navbar {
@@ -21,8 +20,6 @@
   top: 0;
   z-index: 1000;
   background-color: #0c7075!important;
-  padding-left: 50px;
-  padding-right: 50px;
   transition: all 0.5s ease;
 }
 
@@ -350,4 +347,25 @@
 .offcanvas-close:hover {
   background-color: rgba(255, 255, 255, 0.1);
   transform: rotate(90deg);
+}
+
+/* Admin Link Styling */
+.admin-link {
+  display: inline-flex !important;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 6px 12px !important;
+  border-radius: 20px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.admin-link:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.admin-link i {
+  margin-right: 4px;
+  font-size: 14px;
 }
