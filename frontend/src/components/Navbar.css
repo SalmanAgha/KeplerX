@@ -193,6 +193,7 @@
 
 .nav-item {
   position: relative;
+  margin-bottom: 0px !important;
 }
 
 .dropdown-menu {

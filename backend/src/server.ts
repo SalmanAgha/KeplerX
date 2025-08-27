@@ -121,6 +121,35 @@ const parseJSONSafe = (value: any) => {
   return value;
 };
 
+// Flexible parsers for incoming form-data fields that might be plain strings
+const parseArrayFlexible = (value: any): string[] => {
+  if (Array.isArray(value)) {
+    return value;
+  }
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (trimmed.length === 0) return [];
+    // Only support comma-separated lists for robustness
+    return trimmed.split(',').map(s => s.trim()).filter(Boolean);
+  }
+  return [];
+};
+
+const parseObjectFlexible = <T>(value: any, fallback: T): T => {
+  if (value && typeof value === 'object') return value as T;
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+      try {
+        return JSON.parse(trimmed) as T;
+      } catch {
+        return fallback;
+      }
+    }
+  }
+  return fallback;
+};
+
 const transformPortfolioRow = (row: any) => {
   return {
     ...row,
@@ -183,6 +212,13 @@ app.post('/api/portfolio', (req: Request, res: Response) => {
     try {
       console.log('Processing portfolio data...');
       const portfolioData = req.body;
+      console.log('Incoming fields (raw):', {
+        title: portfolioData?.title,
+        categories: portfolioData?.categories,
+        displayCategories: portfolioData?.displayCategories,
+        testimonial: portfolioData?.testimonial,
+        whatWeDelivered: portfolioData?.whatWeDelivered,
+      });
       const files = req.files as { [fieldname: string]: Express.Multer.File[] };
       
       // Process main image
@@ -198,19 +234,21 @@ app.post('/api/portfolio', (req: Request, res: Response) => {
       }
 
       // Prepare data for MySQL
-      const categories = typeof portfolioData.categories === 'string' 
-        ? JSON.parse(portfolioData.categories) 
-        : portfolioData.categories || [];
-      
-      const displayCategories = portfolioData.displayCategories || categories;
-      
-      const testimonial = typeof portfolioData.testimonial === 'string'
-        ? JSON.parse(portfolioData.testimonial)
-        : portfolioData.testimonial || { text: '', author: '', position: '' };
-      
-      const whatWeDelivered = typeof portfolioData.whatWeDelivered === 'string'
-        ? JSON.parse(portfolioData.whatWeDelivered)
-        : portfolioData.whatWeDelivered || { description: '', items: [] };
+      const categories = parseArrayFlexible(portfolioData.categories);
+      console.log('Parsed categories:', categories);
+
+      const displayCategories = Array.isArray(portfolioData.displayCategories)
+        ? portfolioData.displayCategories
+        : (typeof portfolioData.displayCategories === 'string'
+            ? parseArrayFlexible(portfolioData.displayCategories)
+            : categories);
+      console.log('Parsed displayCategories:', displayCategories);
+
+      const testimonial = parseObjectFlexible(portfolioData.testimonial, { text: '', author: '', position: '' });
+      console.log('Parsed testimonial:', testimonial);
+
+      const whatWeDelivered = parseObjectFlexible(portfolioData.whatWeDelivered, { description: '', items: [] as string[] });
+      console.log('Parsed whatWeDelivered:', whatWeDelivered);
 
       // Insert into MySQL
       const [result] = await pool.execute(`
@@ -288,12 +326,32 @@ app.put('/api/portfolio/:id', (req: Request, res: Response) => {
         portfolioData.description || existingItem.description,
         portfolioData.client || existingItem.client,
         portfolioData.date || existingItem.date,
-        JSON.stringify(portfolioData.categories || JSON.parse(existingItem.categories)),
-        JSON.stringify(portfolioData.displayCategories || JSON.parse(existingItem.displayCategories)),
+        JSON.stringify(
+          Array.isArray(portfolioData.categories)
+            ? portfolioData.categories
+            : (typeof portfolioData.categories === 'string'
+                ? parseArrayFlexible(portfolioData.categories)
+                : JSON.parse(existingItem.categories))
+        ),
+        JSON.stringify(
+          Array.isArray(portfolioData.displayCategories)
+            ? portfolioData.displayCategories
+            : (typeof portfolioData.displayCategories === 'string'
+                ? parseArrayFlexible(portfolioData.displayCategories)
+                : JSON.parse(existingItem.displayCategories))
+        ),
         mainImage,
         JSON.stringify(sliderImages),
-        JSON.stringify(portfolioData.testimonial || JSON.parse(existingItem.testimonial)),
-        JSON.stringify(portfolioData.whatWeDelivered || JSON.parse(existingItem.whatWeDelivered)),
+        JSON.stringify(
+          portfolioData.testimonial
+            ? parseObjectFlexible(portfolioData.testimonial, JSON.parse(existingItem.testimonial))
+            : JSON.parse(existingItem.testimonial)
+        ),
+        JSON.stringify(
+          portfolioData.whatWeDelivered
+            ? parseObjectFlexible(portfolioData.whatWeDelivered, JSON.parse(existingItem.whatWeDelivered))
+            : JSON.parse(existingItem.whatWeDelivered)
+        ),
         portfolioData.bgColor || existingItem.bgColor,
         id
       ]);
