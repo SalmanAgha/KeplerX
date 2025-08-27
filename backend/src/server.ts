@@ -150,6 +150,52 @@ const parseObjectFlexible = <T>(value: any, fallback: T): T => {
   return fallback;
 };
 
+// Flexible date normalizer: accepts YYYY-MM-DD, DD-MM-YYYY, DD/MM/YYYY, DD-MMM-YYYY (e.g., 22-Sep-2024)
+const normalizeDateForMySQL = (value: any): string | null => {
+  if (!value) return null;
+  if (value instanceof Date && !isNaN(value.getTime())) {
+    const y = value.getFullYear();
+    const m = String(value.getMonth() + 1).padStart(2, '0');
+    const d = String(value.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+  if (typeof value === 'string') {
+    const str = value.trim();
+    if (!str) return null;
+    // If already YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+    // DD/MM/YYYY or DD-MM-YYYY
+    let m = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+    if (m) {
+      const d = m[1].padStart(2, '0');
+      const mo = m[2].padStart(2, '0');
+      const y = m[3];
+      return `${y}-${mo}-${d}`;
+    }
+    // DD-MMM-YYYY (e.g., 22-Sep-2024)
+    m = str.match(/^(\d{1,2})-([A-Za-z]{3})-(\d{4})$/);
+    if (m) {
+      const day = m[1].padStart(2, '0');
+      const monStr = m[2].toLowerCase();
+      const months: { [k: string]: string } = { jan: '01', feb: '02', mar: '03', apr: '04', may: '05', jun: '06', jul: '07', aug: '08', sep: '09', oct: '10', nov: '11', dec: '12' };
+      const mon = months[monStr];
+      if (mon) {
+        const y = m[3];
+        return `${y}-${mon}-${day}`;
+      }
+    }
+    // Fallback to Date.parse
+    const dt = new Date(str);
+    if (!isNaN(dt.getTime())) {
+      const y = dt.getFullYear();
+      const mo = String(dt.getMonth() + 1).padStart(2, '0');
+      const d = String(dt.getDate()).padStart(2, '0');
+      return `${y}-${mo}-${d}`;
+    }
+  }
+  return null;
+};
+
 const transformPortfolioRow = (row: any) => {
   return {
     ...row,
@@ -251,6 +297,9 @@ app.post('/api/portfolio', (req: Request, res: Response) => {
       console.log('Parsed whatWeDelivered:', whatWeDelivered);
 
       // Insert into MySQL
+      // Normalize date
+      const normalizedDate = normalizeDateForMySQL(portfolioData.date) || null;
+
       const [result] = await pool.execute(`
         INSERT INTO portfolio (
           title, description, client, date, categories, displayCategories,
@@ -260,7 +309,7 @@ app.post('/api/portfolio', (req: Request, res: Response) => {
         portfolioData.title,
         portfolioData.description,
         portfolioData.client,
-        portfolioData.date,
+        normalizedDate,
         JSON.stringify(categories),
         JSON.stringify(displayCategories),
         mainImage,
@@ -315,6 +364,9 @@ app.put('/api/portfolio/:id', (req: Request, res: Response) => {
       }
 
       // Update in MySQL
+      // Normalize date
+      const normalizedUpdateDate = normalizeDateForMySQL(portfolioData.date);
+
       await pool.execute(`
         UPDATE portfolio SET 
           title = ?, description = ?, client = ?, date = ?,
@@ -325,7 +377,7 @@ app.put('/api/portfolio/:id', (req: Request, res: Response) => {
         portfolioData.title || existingItem.title,
         portfolioData.description || existingItem.description,
         portfolioData.client || existingItem.client,
-        portfolioData.date || existingItem.date,
+        normalizedUpdateDate || existingItem.date,
         JSON.stringify(
           Array.isArray(portfolioData.categories)
             ? portfolioData.categories
