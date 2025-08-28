@@ -52,7 +52,7 @@ const PortfolioDetail: React.FC = () => {
         }
         
         // First try to fetch all portfolios and find the matching one
-        const response = await fetch('http://localhost:5000/api/portfolio');
+        const response = await fetch('/api/portfolio');
         
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -104,7 +104,7 @@ const PortfolioDetail: React.FC = () => {
   
   const getImageUrl = (imagePath: string) => {
     if (!imagePath) return '';
-    return imagePath.startsWith('http') ? imagePath : `http://localhost:5000${imagePath}`;
+    return imagePath.startsWith('http') ? imagePath : `${imagePath}`;
   };
 
   const handlePrevSlide = () => {

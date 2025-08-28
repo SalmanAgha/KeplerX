@@ -32,7 +32,7 @@ const EnquiryOffCanvas: React.FC<EnquiryOffCanvasProps> = ({ isOpen, onClose }) 
     
     try {
       console.log('Submitting enquiry form:', formData);
-      const response = await fetch('http://localhost:5000/api/forms/enquiry', {
+      const response = await fetch('/api/forms/enquiry', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

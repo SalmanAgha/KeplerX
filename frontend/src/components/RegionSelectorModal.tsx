@@ -90,7 +90,7 @@ const RegionSelectorModal: React.FC<RegionSelectorModalProps> = ({ isOpen, onClo
                 const data = new FormData(formEl);
                 const payload = Object.fromEntries(data.entries());
                 try {
-                  const res = await fetch('http://localhost:5000/api/forms/free-offer', {
+                  const res = await fetch('/api/forms/free-offer', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload),

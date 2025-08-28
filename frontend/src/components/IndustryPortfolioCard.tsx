@@ -35,7 +35,7 @@ const IndustryPortfolioCard: React.FC<IndustryPortfolioCardProps> = ({ item, ind
   // Get image URL with proper path
   const getImageUrl = (imagePath: string) => {
     if (!imagePath) return '';
-    return imagePath.startsWith('http') ? imagePath : `http://localhost:5000${imagePath}`;
+    return imagePath.startsWith('http') ? imagePath : `${imagePath}`;
   };
   
   return (

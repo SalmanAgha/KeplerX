@@ -140,7 +140,7 @@ const Dashboard: React.FC = () => {
   const fetchPortfolioItems = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('http://localhost:5000/api/portfolio');
+      const response = await fetch('/api/portfolio');
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -157,7 +157,7 @@ const Dashboard: React.FC = () => {
   const deletePortfolio = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this portfolio item?')) {
       try {
-        const response = await fetch(`http://localhost:5000/api/portfolio/${id}`, {
+        const response = await fetch(`/api/portfolio/${id}`, {
           method: 'DELETE',
         });
         
@@ -434,7 +434,7 @@ const Dashboard: React.FC = () => {
       }
 
       // Send data to the server
-      const response = await fetch('http://localhost:5000/api/portfolio', {
+      const response = await fetch('/api/portfolio', {
         method: 'POST',
         body: formData,
       });
@@ -527,8 +527,8 @@ const Dashboard: React.FC = () => {
         author: item.testimonial?.author || '',
         position: item.testimonial?.position || ''
       },
-      image: item.image.startsWith('http') ? item.image : `http://localhost:5000${item.image}`,
-      images: item.images ? item.images.map(img => img.startsWith('http') ? img : `http://localhost:5000${img}`) : [''],
+      image: item.image.startsWith('http') ? item.image : `${item.image}`,
+      images: item.images ? item.images.map(img => img.startsWith('http') ? img : `${img}`) : [''],
       bgColor: item.bgColor || '#045e63',
       whatWeDelivered: {
         description: item.whatWeDelivered?.description || '',
@@ -561,7 +561,7 @@ const Dashboard: React.FC = () => {
       setFormsError(null);
       
       console.log(`Fetching ${formType} forms...`);
-      const response = await fetch(`http://localhost:5000/api/forms/${formType}`);
+      const response = await fetch(`/api/forms/${formType}`);
       const data = await response.json();
       
       console.log(`${formType} forms data:`, data);
@@ -598,7 +598,7 @@ const Dashboard: React.FC = () => {
     newStatus: string
   ) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/forms/${formType}/${formId}/status`, {
+      const response = await fetch(`/api/forms/${formType}/${formId}/status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -623,7 +623,7 @@ const Dashboard: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/forms/${formType}/${formId}`, {
+      const response = await fetch(`/api/forms/${formType}/${formId}`, {
         method: 'DELETE',
       });
 
@@ -985,7 +985,7 @@ const Dashboard: React.FC = () => {
                     <div className="portfolio-card" key={item._id}>
                       <div className="portfolio-image">
                         <img 
-                          src={item.image.startsWith('http') ? item.image : `http://localhost:5000${item.image}`} 
+                          src={item.image.startsWith('http') ? item.image : `${item.image}`} 
                           alt={item.title} 
                         />
                         <div className="portfolio-actions">
@@ -1038,7 +1038,7 @@ const Dashboard: React.FC = () => {
               <div className="portfolio-detail-header">
                 <div className="portfolio-detail-image">
                   <img 
-                    src={selectedPortfolio.image.startsWith('http') ? selectedPortfolio.image : `http://localhost:5000${selectedPortfolio.image}`} 
+                    src={selectedPortfolio.image.startsWith('http') ? selectedPortfolio.image : `${selectedPortfolio.image}`} 
                     alt={selectedPortfolio.title} 
                   />
                 </div>

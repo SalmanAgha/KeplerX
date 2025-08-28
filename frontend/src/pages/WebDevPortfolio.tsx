@@ -30,7 +30,7 @@ const WebDevPortfolio: React.FC = () => {
     const fetchPortfolios = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/portfolio');
+        const response = await fetch('/api/portfolio');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

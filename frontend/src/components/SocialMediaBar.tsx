@@ -50,7 +50,7 @@ const SocialMediaBar: React.FC<SocialMediaBarProps> = ({ showForm, onOpenForm, o
     
     try {
       console.log('Submitting quote form:', formData);
-      const response = await fetch('http://localhost:5000/api/forms/quote', {
+      const response = await fetch('/api/forms/quote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
