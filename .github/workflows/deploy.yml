@@ -1,0 +1,64 @@
+name: Deploy KeplerX
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Build Frontend
+      - name: Build Frontend
+        working-directory: ./frontend
+        run: |
+          npm install
+          npm run build
+        env:
+          NODE_OPTIONS: "--openssl-legacy-provider"
+
+      # Build Backend
+      - name: Build Backend
+        working-directory: ./backend
+        run: |
+          npm install
+          npm run build
+
+      # Deploy to VPS
+      - name: Deploy to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          source: "frontend/build/*,backend/dist/*,backend/package.json,backend/package-lock.json"
+          target: "/home/newuser/keplerx"
+          strip_components: 0
+
+      - name: Post-deployment commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            cd /home/newuser/keplerx/backend
+            npm install --production
+            # Restart backend (assuming pm2 is used)
+            pm2 restart keplerx-backend || pm2 start dist/server.js --name keplerx-backend
+            
+            # Nginx is already configured to serve the build folder or proxy
+            # If you serve frontend via Nginx directly:
+            # sudo systemctl reload nginx
