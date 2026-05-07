@@ -1,0 +1,13 @@
+.banner{display:flex;justify-content:space-between;align-items:center;background:var(--greyd-gradient-banner);color:var(--greyd-text-white);padding:20px 32px;border-radius:12px;margin-bottom:32px}
+.bannerTitle{font-size:1.75rem;font-weight:600;margin:0}
+.bannerDesc{font-size:1rem;margin:0;opacity:.9;color:var(--greyd-text-white)}
+.bannerDate{font-size:.9rem;opacity:.8;background:rgba(255,255,255,.5);padding:10px 20px;border-radius:10px;font-weight:500;color:var(--greyd-text-white)}
+.statsGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-bottom:32px}
+.statCard{background:var(--greyd-bg-white);border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.08);display:flex;align-items:center;gap:16px;border:1px solid var(--greyd-border-color);transition:transform .3s ease}
+.statCard:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.15)}
+.statIcon{display:flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:12px;background:var(--greyd-primary-light);color:var(--greyd-primary-color);font-size:24px}
+.statContent h3{font-size:2rem;font-weight:700;margin:0 0 4px;color:var(--greyd-text-dark)}
+.statContent p{margin:0 0 8px;font-size:.9rem;color:var(--greyd-text-muted)}
+.statTrend{display:flex;align-items:center;gap:4px;font-size:.85rem;font-weight:500}
+.trendUp{color:var(--greyd-success-color)}
+.trendDown{color:var(--greyd-danger-color)}

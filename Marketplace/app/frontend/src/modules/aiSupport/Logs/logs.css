@@ -1,0 +1,2 @@
+.logs-wrapper{padding:2rem;font-family:var(--greyd-font-family)}
+.logs-table{width:100%;border-collapse:collapse}th,td{padding:.6rem;border-bottom:1px solid var(--greyd-border-color);font-size:.9rem;text-align:left}th{background:var(--greyd-bg-light)}

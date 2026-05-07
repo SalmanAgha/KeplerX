@@ -1,0 +1,25 @@
+.tickets-page { padding: 24px; }
+.tickets-table { width: 100%; border-collapse: collapse; }
+.tickets-table th, .tickets-table td { border: 1px solid #ddd; padding: 8px; }
+.tickets-table th { background: #f5f5f5; text-align: left; }
+.tickets-tabs button{margin-right:8px;padding:6px 12px;border:none;background:#eee;cursor:pointer}
+.tickets-tabs button.active{background:#ccc;font-weight:700}
+.tickets-controls{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.tickets-search{padding:6px 10px;border:1px solid #ccc;border-radius:6px;width:220px}
+.tickets-page-size select,.tickets-controls select{padding:6px 10px;border-radius:6px;border:1px solid #ccc}
+.tickets-controls button{padding:6px 12px;border:none;border-radius:6px;background:var(--greyd-primary-color);color:#fff;cursor:pointer}
+.tickets-controls button:disabled{background:#999;cursor:default}
+.badge{padding:3px 8px;border-radius:12px;font-size:0.75rem;color:#fff;text-transform:capitalize}
+.badge.active{background:#16a34a}
+.badge.closed{background:#6b7280}
+.date-filters{display:flex;gap:12px;margin-bottom:8px}
+.date-filter input{padding:6px;border:1px solid #ccc;border-radius:6px}
+.tickets-export{padding:6px 12px;border:none;border-radius:6px;background:var(--greyd-secondary-color);color:#fff;cursor:pointer}
+.table-action{padding:4px 8px;border-radius:4px;font-size:0.8rem;background:var(--greyd-primary-color);color:#fff;border:none;cursor:pointer;}
+.table-action:hover{opacity:0.9;}
+.tickets-card-wrapper{padding:16px;display:flex;justify-content:center}
+.tickets-card{background:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.1);padding:24px;max-width:1200px;width:100%;min-height:calc(100vh - 160px);display:flex;flex-direction:column}
+.row-actions{display:flex;gap:6px;justify-content:center;}
+
+.toast{position:fixed;bottom:40px;right:40px;background:#333;color:#fff;padding:10px 16px;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,.2);z-index:1000;animation:fadein .3s;}
+@keyframes fadein{from{opacity:0;transform:translateY(20px);}to{opacity:1;}}

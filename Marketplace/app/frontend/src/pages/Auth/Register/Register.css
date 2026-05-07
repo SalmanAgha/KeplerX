@@ -1,0 +1,23 @@
+.register-bg{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#000000;position:relative}
+.register-card{background:rgba(255,255,255,0.1);backdrop-filter:blur(20px);padding:32px;border-radius:16px;display:flex;flex-direction:column;gap:8px;min-width:320px;max-width:400px;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative;z-index:1;border:1px solid rgba(255,255,255,0.2)}
+.register-title{text-align:center;margin:0 0 8px 0;color:#fff;font-weight:700}
+.register-tagline{text-align:center;margin:0 0 24px 0;color:rgba(255,255,255,0.7);font-size:0.9rem;line-height:1.4}
+.icon-input{display:flex;align-items:center;border:1px solid rgba(255,255,255,0.2);border-radius:8px;background:rgba(255,255,255,0.1);margin-bottom:8px;padding:0 12px}
+.icon-input svg{color:rgba(255,255,255,0.7);margin-right:8px}
+.icon-input input{flex:1;border:none;background:transparent;padding:12px 0;font-size:1rem;color:#fff}
+.icon-input input:focus{outline:none}
+.icon-input input::placeholder{color:rgba(255,255,255,0.5)}
+.register-card button{padding:12px 24px;border:none;border-radius:50px;background:rgba(255,255,255,0.2);backdrop-filter:blur(10px);color:#000;font-weight:700;font-size:0.95rem;cursor:pointer;transition:allropracture 0.4s cubic-bezier(0.4, 0, 0.2, 1);position:relative;border:2px solid transparent;width:100%}
+.register-card button::before{content:'';position:absolute;inset:-2px;border-radius:52px;background:linear-gradient(135deg, #28CC00, #32d936, #28CC00, #1a5c1a);background-size:300% 300%;animation:border-run 3s linear infinite;z-index:-1}
+.register-card button::after{content:'';position:absolute;inset:0;border-radius:50px;background:rgba(255,255,255,255,0.2);backdrop-filter:blur(10px);z-index:-1}
+.register-card button:hover::after{background:rgba(255,255,255,0.3)}
+@keyframes border-run{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.register-card button:hover{transform:translateY(-4px);box-shadow:0 4px 20px rgba(0,0,0,0.15)}
+.register-card button:disabled{opacity:0.6;cursor:not-allowed}
+.error-text{color:#ef4444;font-size:0.875rem;margin-bottom:8px;display:block}
+.register-footer{text-align:center;margin-top:16px;color:rgba(255,255,255,0.7);font-size:0.875rem}
+.register-footer a{color:rgba(255,255,255,0.8);text-decoration:none;font-weight:600}
+.register-footer a:hover{text-decoration:underline}
+.home-button{position:fixed;top:20px;right:20px;display:flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:rgba(255,255,255,0.9);text-decoration:none;font-size:0.9rem;font-weight:600;transition:all 0.3s ease;z-index:10}
+.home-button:hover{background:rgba(255,255,255,0.2);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+.home-button svg{font-size:1.1rem}

@@ -1,0 +1,14 @@
+.greyd-sidebar{width:var(--sidebar-width);background:#f1f5f9;color:#475569;min-height:100vh;max-height:100vh;display:flex;flex-direction:column;align-items:stretch;font-family:var(--greyd-font-family);box-shadow:2px 0 12px 0 rgba(0,0,0,.05);position:fixed;left:0;top:0;z-index:1000;transition:transform .4s cubic-bezier(.4,0,.2,1),opacity .3s ease;transform:translateX(0);opacity:1;overflow:hidden;border-right:1px solid #e2e8f0}
+.greyd-sidebar.closed{transform:translateX(-100%);transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.greyd-sidebar-logo{font-size:1.5rem;font-weight:700;padding:8px 20px;display:flex;align-items:center;gap:12px;color:#1e293b;font-family:var(--greyd-font-family);border-bottom:1px solid #e2e8f0;background:rgba(255,255,255,0.5);height:52px;box-sizing:border-box}
+.greyd-sidebar-nav{flex-grow:1;display:flex;flex-direction:column;gap:4px;padding:12px;overflow-y:auto;max-height:calc(100vh - 180px)}
+.greyd-sidebar-nav a{font-size:.9rem;font-weight:500;letter-spacing:.01em;padding:10px 12px;color:#64748b;text-decoration:none;display:flex;align-items:center;gap:12px;position:relative;transition:all .2s ease;font-family:var(--greyd-font-family);border-radius:8px;background:transparent}
+.greyd-sidebar-nav a:hover,.greyd-sidebar-nav a.active{background:#ffffff;color:#1e293b;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.greyd-sidebar-nav a .nav-icon{font-size:1.1em;color:#64748b;transition:color .2s ease}
+.greyd-sidebar-nav a:hover .nav-icon,.greyd-sidebar-nav a.active .nav-icon{color:#28CC00}
+.nav-arrow{margin-left:auto;font-size:.9em;transition:transform .2s ease}
+.submenu-arrow.open{transform:rotate(180deg)}
+.greyd-sidebar-submenu{background:transparent;animation:slideDown .3s ease;margin-left:32px;padding-top:4px}
+.greyd-sidebar-submenu-item{font-size:.85rem;padding:8px 12px;color:#64748b;text-decoration:none;display:flex;align-items:center;gap:8px;transition:all .2s ease;border-radius:6px;background:transparent;margin-bottom:2px}
+.greyd-sidebar-submenu-item:hover{background:#ffffff;color:#1e293b;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+@keyframes slideDown{from{max-height:0;opacity:0}to{max-height:400px;opacity:1}}

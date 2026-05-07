@@ -1,0 +1,153 @@
+:root {
+  /* FUTURISTIC AI/SOFTWARE THEME */
+  
+  /* Primary Color Palette - Modern Cyan/Blue */
+  --color-primary: #28CC00;
+  --color-primary-dark: #00a8cc;
+  --color-primary-light: #6ef4ff;
+  
+  /* Accent Color Palette - Purple/Pink */
+  --color-accent: #a855f7;
+  --color-accent-dark: #7c3aed;
+  --color-accent-light: #c084fc;
+  
+  /* Main Gradients - Futuristic Cyan to Purple */
+  --greyd-gradient-sidebar: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --greyd-gradient-banner: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  --greyd-primary-bg: linear-gradient(135deg, #1e293b 0%, #334155 100% солнечная);
+  
+  /* Hero Gradient - Dark with Cyan Accents */
+  --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  --gradient-hero-overlay: linear-gradient(135deg, rgba(40, 204, 0, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+  
+  /* Supporting Gradients */
+  --gradient-stats: linear-gradient(135deg, #28CC00 0%, #667eea 100%);
+  --gradient-feature: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  --gradient-tech: linear-gradient(135deg, #28CC00 0%, #00f5ff 100%);
+  --gradient-button: linear-gradient(135deg, #28CC00 0%, #667eea 100%);
+  
+  /* Typography */
+  --greyd-font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Poppins', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  
+  /* Background Colors - Dark Theme */
+  --greyd-bg: #0f172a;
+  --greyd-bg-light: #1e293b;
+  --greyd-bg-white: #0d211a;
+  
+  /* Text Colors */
+  --greyd-text-dark: #f1f5f9;
+  --greyd-text-black: #ffffff;
+  --greyd-text-muted: #94a3b8;
+  --greyd-text-white: #ffffff;
+  
+  /* Primary Colors */
+  --greyd-primary-color: #28CC00;
+  --greyd-primary-light: #1e293b;
+  --greyd-primary-dark: #0f172a;
+  
+  /* Semantic Colors */
+  --greyd-success-color: #10b981;
+  --greyd-danger-color: #ef4444;
+  --color-warning: #f59e0b;
+  
+  /* Border and UI Colors */
+  --greyd-border-color: #334155;
+  --greyd-icon-color: #94a3b8;
+  
+  /* Sidebar Colors */
+  --greyd-text-sidebar: rgba(255, 255, 255, 0.95);
+  --greyd-sidebar-overlay: rgba(40, 204, 0, 0.1);
+  --greyd-hover-overlay: rgba(255, 255, 255, 0.05);
+  --greyd-hover-overlay-sub: rgba(255, 255, 255, 0.08);
+  
+  /* Additional Color Variables */
+  --color-gold: #28CC00;
+  --color-gold-light: #6ef4ff;
+  --color-purple-light: #667eea;
+  --color-purple-dark: #764ba2;
+  --color-star: #fbbf24;
+  
+  /* Tech Accent Colors */
+  --color-cyan: #28CC00;
+  --color-cyan-dark: #00a8cc;
+  --color-cyan-glow: #28CC0033;
+  
+  /* Spacing Variables */
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 40px;
+  --spacing-3xl: 60px;
+  
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+  
+  /* Shadows - Dark Theme with Glow Effects */
+  --greyd-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
+  --shadow-button: 0 4px 20px rgba(40, 204, 0, 0.3);
+  --shadow-button-hover: 0 8px 30px rgba(40, 204, 0, 0.5);
+  --shadow-card-hover: 0 12px 40px rgba(40, 204, 0, 0.2);
+  --shadow-primary: 0 0 20px rgba(40, 204, 0, 0.4);
+  --shadow-accent: 0 0 20px rgba(102, 126, 234, 0.4);
+  --shadow-gold: 0 4px 12px rgba(40, 204, 0, 0.3);
+  --shadow-gold-lg: 0 6px 20px rgba(40, 204, 0, 0.4);
+  
+  /* Glow Effects */
+  --glow-cyan: 0 0 20px rgba(40, 204, 0, 0.5), 0 0 40px rgba(40, 204, 0, 0.3);
+  --glow-purple: 0 0 20px rgba(102, 126, 234, 0.5), 0 0 40px rgba(118, 75, 162, 0.3);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 500ms ease;
+  
+  /* Layout */
+  --sidebar-width: 260px;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  /* Background Colors - Light Theme */
+  --greyd-bg: #ffffff;
+  --greyd-bg-light: #f8fafc;
+  --greyd-bg-white: #ffffff;
+  
+  /* Text Colors */
+  --greyd-text-dark: #1e293b;
+  --greyd-text-black: #0f172a;
+  --greyd-text-muted: #64748b;
+  --greyd-text-white: #ffffff;
+  
+  /* Border and UI Colors */
+  --greyd-border-color: #e2e8f0;
+  --greyd-icon-color: #475569;
+  
+  /* Main Gradients */
+  --greyd-gradient-sidebar: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --greyd-gradient-banner: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  
+  /* Shadows - Light Theme */
+  --greyd-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  --shadow-button: 0 4px 20px rgba(102, 126, 234, 0.2);
+  --shadow-button-hover: 0 8px 30px rgba(102, 126, 234, 0.4);
+  --shadow-card-hover: 0 12px 40px rgba(0, 0, 0, 0.08);
+  --shadow-primary: 0 10px 30px rgba(59, 130, 246, 0.2);
+  --shadow-accent: 0 10px 30px rgba(168, 85, 247, 0.2);
+  --shadow-gold: 0 4px 12px rgba(102, 126, 234, 0.15);
+  --shadow-gold-lg: 0 6px 20px rgba(102, 126, 234, 0.25);
+}

@@ -1,0 +1,3 @@
+.navWrapper{display:flex;gap:24px;margin-bottom:24px;border-bottom:1px solid var(--greyd-border-color)}
+.tab{padding:10px 0;font-weight:600;color:var(--greyd-text-muted);border-bottom:3px solid transparent;transition:color .2s ease,border-color .2s ease;text-decoration:none}
+.active{color:var(--greyd-primary-color);border-color:var(--greyd-primary-color)}

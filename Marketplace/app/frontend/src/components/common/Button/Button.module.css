@@ -1,0 +1,30 @@
+.btn {
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--greyd-font-family);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.primary {
+  background: var(--greyd-primary-color);
+  color: #fff;
+}
+
+.primary:hover {
+  background: var(--greyd-primary-dark);
+}
+
+.secondary {
+  background: var(--greyd-bg-light);
+  color: var(--greyd-text-dark);
+}
+
+.secondary:hover {
+  background: var(--greyd-bg);
+}
+
+.danger{background:var(--greyd-danger-color);color:#fff}
+.danger:hover{background:#b91c1c}

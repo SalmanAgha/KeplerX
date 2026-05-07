@@ -1,0 +1,5 @@
+.tests-wrapper{padding:2rem;font-family:var(--greyd-font-family)}
+.tests-inputs{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.tests-inputs button{padding:.6rem 1.2rem;border:none;border-radius:6px;background:var(--greyd-primary-color);color:#fff;cursor:pointer}
+.tests-inputs button:disabled{background:var(--greyd-text-muted);cursor:not-allowed}
+.test-result{background:var(--greyd-bg-light);padding:1rem;border-radius:8px}

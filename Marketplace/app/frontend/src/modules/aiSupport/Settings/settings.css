@@ -1,0 +1,11 @@
+.settings-wrapper{padding:2rem;font-family:var(--greyd-font-family);max-width:600px}
+.setting-block{margin-bottom:2rem}
+.setting-block h4{margin-bottom:.75rem;color:var(--greyd-text-dark)}
+.toggle{display:flex;align-items:center;gap:.75rem;font-size:.9rem}
+.toggle input{display:none}
+.toggle .slider{width:40px;height:20px;background:var(--greyd-text-muted);border-radius:20px;position:relative;cursor:pointer;transition:background .3s}
+.toggle .slider:before{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .3s}
+.toggle input:checked + .slider{background:var(--greyd-primary-color)}
+.toggle input:checked + .slider:before{transform:translateX(20px)}
+.label-text{user-select:none}
+.setting-block select, .setting-block input[type=number]{padding:.4rem .6rem;border:1px solid var(--greyd-border-color);border-radius:6px;font-family:inherit}

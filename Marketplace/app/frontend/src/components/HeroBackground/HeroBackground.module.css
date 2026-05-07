@@ -1,0 +1,123 @@
+.backgroundContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  background: #000000;
+}
+
+/* Gradient Round Flares */
+.flare1 {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(40, 204, 0, 0.45) 0%, rgba(40, 204, 0, 0.2) 40%, transparent 70%);
+  border-radius: 50%;
+  animation: flare-pulse 2s ease-in-out infinite;
+  filter: blur(80px);
+  z-index: 1;
+  box-shadow: 0 0 200px rgba(40, 204, 0, 0.25);
+}
+
+.flare2 {
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(40, 204, 0, 0.4) 0%, rgba(40, 204, 0, 0.15) 50%, transparent 75%);
+  border-radius: 50%;
+  animation: flare-pulse 2.5s ease-in-out infinite;
+  animation-delay: 2s;
+  filter: blur(100px);
+  z-index: 1;
+  box-shadow: 0 0 200px rgba(40, 204, 0, 0.2);
+}
+
+@keyframes flare-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.4;
+  }
+}
+
+/* Smoke Effects */
+.smoke1 {
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(40, 204, 0, 0.55) 0%, rgba(40, 204, 0, 0.25) 40%, transparent 70%);
+  border-radius: 50%;
+  animation: smoke-rise 3s ease-in-out infinite;
+  filter: blur(60px);
+  z-index: 0;
+}
+
+.smoke2 {
+  position: absolute;
+  bottom: 0;
+  right: 20%;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(ellipse, rgba(40, 204, 0, 0.5) 0%, rgba(40, 204, 0, 0.23) 40%, transparent 70%);
+  border-radius: 50%;
+  animation: smoke-rise 3.5s ease-in-out infinite;
+  animation-delay: 2s;
+  filter: blur(70px);
+  z-index: 0;
+}
+
+.smoke3 {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(ellipse, rgba(40, 204, 0, 0.45) 0%, rgba(40, 204, 0, 0.2) 40%, transparent 70%);
+  border-radius: 50%;
+  animation: smoke-rise 4s ease-in-out infinite;
+  animation-delay: 4s;
+  filter: blur(80px);
+  z-index: 0;
+}
+
+.smoke4 {
+  position: absolute;
+  bottom: 0;
+  left: 30%;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(ellipse, rgba(40, 204, 0, 0.53) 0%, rgba(40, 204, 0, 0.24) 40%, transparent 70%);
+  border-radius: 50%;
+  animation: smoke-rise 3.5s ease-in-out infinite;
+  animation-delay: 6s;
+  filter: blur(65px);
+  z-index: 0;
+}
+
+@keyframes smoke-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-200px) scale(1.5);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-400px) scale(2);
+    opacity: 0;
+  }
+}

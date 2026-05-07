@@ -1,0 +1,21 @@
+.app-shell{display:flex}
+
+/* Sidebar */
+.greyd-sidebar{width:var(--sidebar-width)}
+.greyd-sidebar{transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.greyd-dashboard-layout.sidebar-closed .greyd-sidebar{transform:translateX(-100%)}
+.greyd-dashboard-layout.sidebar-open .greyd-sidebar{transform:translateX(0)}
+
+/* ensure Sidebar module slides */
+.closed{transform:translateX(-100%)!important;transition:transform .4s cubic-bezier(.4,0,.2,1);}
+
+/* Top Bar */
+.greyd-dashboard-topbar{position:fixed;top:0;left:var(--sidebar-width);right:0;height:56px;transition:left .4s cubic-bezier(.4,0,.2,1)}
+.greyd-dashboard-layout.sidebar-closed .greyd-dashboard-topbar{left:0}
+
+/* Content wrapper */
+.greyd-dashboard-layout{display:flex}
+.app-shell-content{transition:margin-left .2s ease,width .2s ease}
+.greyd-dashboard-layout.sidebar-open .app-shell-content{margin-left:var(--sidebar-width);width:calc(100% - var(--sidebar-width))}
+.greyd-dashboard-layout.sidebar-closed .app-shell-content{margin-left:0;width:100%}
+.app-shell-main{padding-top:88px; padding-right:30px; padding-left:30px; padding-bottom:40px}

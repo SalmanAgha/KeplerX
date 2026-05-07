@@ -1,0 +1,118 @@
+/* CTA SECTION */
+.ctaSection {
+  background: #151515;
+  padding: 60px 40px;
+  text-align: center;
+  margin-top: 54px;
+}
+
+.ctaContent {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ctaBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--greyd-text-white);
+  margin-bottom: 24px;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaBadge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  padding: 2px;
+  background: linear-gradient(135deg, #28CC00, #32d936, #28CC00, #1a5c1a);
+  background-size: 300% 300%;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: border-run 3s linear infinite;
+}
+
+.ctaTitle {
+ font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--greyd-text-white);
+  margin: 0 0 16px 0;
+}
+
+.ctaDescription {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 30px 0;
+  line-height: 1.6;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: #000000;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.ctaButton::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #28CC00, #32d936, #28CC00, #1a5c1a);
+  background-size: 300% 300%;
+  animation: border-run 3s linear infinite;
+  z-index: -1;
+}
+
+.ctaButton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  z-index: -1;
+}
+
+.ctaButton:hover::after {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.ctaButton:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.ctaButtonIcon {
+  transition: transform 0.3s ease;
+}
+
+.ctaButton:hover .ctaButtonIcon {
+  transform: translateX(4px);
+}
+

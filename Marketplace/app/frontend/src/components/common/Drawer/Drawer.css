@@ -1,0 +1,4 @@
+.drawer-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;justify-content:flex-end;z-index:1000}
+.drawer-panel{width:400px;height:100%;background:#fff;box-shadow:-2px 0 4px rgba(0,0,0,.2);position:relative;display:flex;flex-direction:column}
+.drawer-close{position:absolute;top:8px;right:8px;border:none;background:none;font-size:24px;cursor:pointer}
+.drawer-content{padding:24px;overflow:auto;flex:1}

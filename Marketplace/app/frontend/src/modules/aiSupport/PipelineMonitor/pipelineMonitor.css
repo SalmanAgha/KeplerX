@@ -1,0 +1,8 @@
+.pm-wrapper{padding:2rem;font-family:var(--greyd-font-family)}
+.pm-table{width:100%;border-collapse:collapse}
+.pm-table th, .pm-table td{padding:.75rem;border-bottom:1px solid var(--greyd-border-color);text-align:left;font-size:.9rem}
+.pm-table th{background:var(--greyd-bg-light)}
+.pm-badge{color:#fff;padding:2px 8px;border-radius:6px;font-size:.75rem}
+.pm-progress{height:8px;background:var(--greyd-bg-light);border-radius:4px;overflow:hidden}
+.pm-progress div{height:100%;background:var(--greyd-primary-color);transition:width .6s ease}
+.pm-empty{padding:2rem;text-align:center;color:var(--greyd-text-muted)}
