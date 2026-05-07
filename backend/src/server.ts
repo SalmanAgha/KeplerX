@@ -4,9 +4,10 @@ import dotenv from 'dotenv';
 import path from 'path';
 import multer from 'multer';
 import fs from 'fs';
-import pool, { testConnection, initializeDatabase } from './config/mysql';
+import pool, { testConnection, initializeDatabase } from './config/postgres';
 import formsRouter from './routes/forms';
-import appServicesRouter from './routes/appServices';
+import marketplaceRouter from './routes/marketplace';
+import usersRouter from './routes/users';
 
 dotenv.config();
 
@@ -79,13 +80,14 @@ const initApp = async () => {
 
 // Routes
 app.use('/api/forms', formsRouter);
-app.use('/api/app-services', appServicesRouter);
+app.use('/api/marketplace', marketplaceRouter);
+app.use('/api/users', usersRouter);
 
 // Test route
 app.get('/test', (req: Request, res: Response) => {
   res.json({ 
     message: 'Backend is working!', 
-    database: 'MySQL with XAMPP',
+    database: 'PostgreSQL',
     timestamp: new Date().toISOString()
   });
 });
@@ -300,11 +302,12 @@ app.post('/api/portfolio', (req: Request, res: Response) => {
       // Normalize date
       const normalizedDate = normalizeDateForMySQL(portfolioData.date) || null;
 
-      const [result] = await pool.execute(`
+      const [rows] = await pool.execute(`
         INSERT INTO portfolio (
           title, description, client, date, categories, displayCategories,
           image, images, testimonial, whatWeDelivered, bgColor
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        RETURNING id
       `, [
         portfolioData.title,
         portfolioData.description,
@@ -319,10 +322,12 @@ app.post('/api/portfolio', (req: Request, res: Response) => {
         portfolioData.bgColor || '#2d2150'
       ]);
 
+      const newId = (rows as any)[0].id;
+
       console.log('Portfolio item created successfully');
       res.status(201).json({ 
         message: 'Portfolio item created successfully', 
-        id: (result as any).insertId
+        id: newId
       });
     } catch (error) {
       console.error('Error creating portfolio item:', error);
@@ -421,9 +426,9 @@ app.delete('/api/portfolio/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     
-    const [result] = await pool.execute('DELETE FROM portfolio WHERE id = ?', [id]);
+    const [rows, result] = await pool.execute('DELETE FROM portfolio WHERE id = ?', [id]);
     
-    if ((result as any).affectedRows === 0) {
+    if ((result as any).rowCount === 0) {
       return res.status(404).json({ error: 'Portfolio item not found' });
     }
     

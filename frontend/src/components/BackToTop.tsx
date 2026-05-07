@@ -1,46 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { FaRocket } from 'react-icons/fa';
 import './BackToTop.css';
 
 const BackToTop: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  // Show button when page is scrolled down
-  const toggleVisibility = () => {
-    if (window.pageYOffset > 300) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  };
-
-  // Set the top scroll position
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    const onScroll = () => setVisible(window.scrollY > 400);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const scrollTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
   return (
-    <div 
-      className={`back-to-top ${isVisible ? 'visible' : ''}`}
-      onClick={scrollToTop}
+    <button
+      className={`back-to-top ${visible ? 'visible' : ''}`}
+      onClick={scrollTop}
       aria-label="Back to top"
-      role="button"
-      tabIndex={0}
     >
-      <div className="rocket-icon">
-        <FaRocket />
-      </div>
-      <span className="back-to-top-tooltip">Back to Top</span>
-    </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 15l-6-6-6 6"/>
+      </svg>
+    </button>
   );
 };
 
-export default BackToTop; 
+export default BackToTop;

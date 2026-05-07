@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './Login.css';
 
 interface LoginProps {
@@ -113,20 +114,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             </button>
           </form>
           <div className="login-footer">
-            <p>Demo Credentials</p>
-            <div className="demo-credentials">
-              <div className="credential-item">
-                <span className="credential-label">Username:</span>
-                <span className="credential-value">admin</span>
-              </div>
-              <div className="credential-item">
-                <span className="credential-label">Password:</span>
-                <span className="credential-value">admin123</span>
-              </div>
-            </div>
-            <a href="/" className="back-to-site-link">
+            <Link to="/" className="back-to-site-link">
               <i className="fas fa-arrow-left"></i> Back to Website
-            </a>
+            </Link>
           </div>
         </div>
       </div>

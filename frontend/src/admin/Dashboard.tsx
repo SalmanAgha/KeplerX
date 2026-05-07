@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import Login from './Login';
+import MarketplaceAdmin from './MarketplaceAdmin';
 
 interface PortfolioItem {
   _id: string;
@@ -34,32 +35,28 @@ interface PortfolioItem {
   };
 }
 
-interface FormBase {
+interface MissionBrief {
   _id: string;
   name: string;
   email: string;
-  phone: string;
-  submittedAt: string;
-  status: string;
-}
-
-interface ContactForm extends FormBase {
-  subject: string;
-  message: string;
-}
-
-interface EnquiryForm extends FormBase {
-  company: string;
-  service: string;
-  message: string;
-}
-
-interface QuoteForm extends FormBase {
-  company: string;
+  company?: string;
   service: string;
   budget: string;
-  timeline: string;
-  projectDetails: string;
+  message: string;
+  status: string;
+  submittedAt: string;
+}
+
+interface AdminUser {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  smtp_host?: string;
+  smtp_port?: number;
+  smtp_user?: string;
+  smtp_pass?: string;
+  createdat: string;
 }
 
 const Dashboard: React.FC = () => {
@@ -112,16 +109,17 @@ const Dashboard: React.FC = () => {
   
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
   
-  const [activeFormTab, setActiveFormTab] = useState<'contact' | 'enquiry' | 'quote' | 'free-offer'>('contact');
-  const [contactForms, setContactForms] = useState<ContactForm[]>([]);
-  const [enquiryForms, setEnquiryForms] = useState<EnquiryForm[]>([]);
-  const [quoteForms, setQuoteForms] = useState<QuoteForm[]>([]);
-  const [freeOfferForms, setFreeOfferForms] = useState<any[]>([]);
+  const [missionBriefs, setMissionBriefs] = useState<MissionBrief[]>([]);
   const [isFormsLoading, setIsFormsLoading] = useState(false);
   const [formsError, setFormsError] = useState<string | null>(null);
-  const [isRegionOpen, setIsRegionOpen] = useState(false);
-  const [regionModalView, setRegionModalView] = useState<'both' | 'region' | 'offer'>('region');
-  const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
+  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
+  const [isUsersLoading, setIsUsersLoading] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([
+    { id: 1, title: 'New Mission Brief', text: 'Sarah Chen submitted a new brief.', time: '2 mins ago', read: false },
+    { id: 2, title: 'Portfolio Updated', text: 'Marketplace item "AI Platform" was edited.', time: '1 hour ago', read: true },
+    { id: 3, title: 'System Alert', text: 'SMTP connection tested successfully.', time: '5 hours ago', read: false },
+  ]);
   
   useEffect(() => {
     // Check if user is authenticated
@@ -555,95 +553,72 @@ const Dashboard: React.FC = () => {
     window.location.href = '/';
   };
 
-  const fetchForms = async (formType: 'contact' | 'enquiry' | 'quote' | 'free-offer') => {
+  const fetchMissionBriefs = async () => {
     try {
       setIsFormsLoading(true);
       setFormsError(null);
-      
-      console.log(`Fetching ${formType} forms...`);
-      const response = await fetch(`/api/forms/${formType}`);
+      const response = await fetch('/api/forms');
       const data = await response.json();
-      
-      console.log(`${formType} forms data:`, data);
-      
-      if (!response.ok) {
-        throw new Error(data.error || `Failed to fetch ${formType} forms`);
-      }
-      
-      switch (formType) {
-        case 'contact':
-          setContactForms(data);
-          break;
-        case 'enquiry':
-          setEnquiryForms(data);
-          break;
-        case 'quote':
-          setQuoteForms(data);
-          break;
-        case 'free-offer':
-          setFreeOfferForms(data);
-          break;
-      }
+      if (!response.ok) throw new Error(data.error || 'Failed to fetch mission briefs');
+      setMissionBriefs(data);
     } catch (error: any) {
-      console.error(`Error fetching ${formType} forms:`, error);
-      setFormsError(error.message || `Failed to fetch ${formType} forms`);
+      console.error('Error fetching mission briefs:', error);
+      setFormsError(error.message || 'Failed to fetch mission briefs');
     } finally {
       setIsFormsLoading(false);
     }
   };
 
-  const updateFormStatus = async (
-    formType: 'contact' | 'enquiry' | 'quote' | 'free-offer',
-    formId: string,
-    newStatus: string
-  ) => {
+  const updateFormStatus = async (formId: string, newStatus: string) => {
     try {
-      const response = await fetch(`/api/forms/${formType}/${formId}/status`, {
+      const response = await fetch(`/api/forms/${formId}/status`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to update form status');
-      }
-
-      // Refresh the forms list after successful update
-      fetchForms(formType);
-    } catch (error) {
-      setFormsError(error instanceof Error ? error.message : 'An error occurred while updating form status');
+      if (!response.ok) throw new Error('Failed to update status');
+      fetchMissionBriefs();
+    } catch (error: any) {
+      setFormsError(error instanceof Error ? error.message : 'An error occurred while updating status');
     }
   };
 
-  const deleteForm = async (formType: 'contact' | 'enquiry' | 'quote' | 'free-offer', formId: string) => {
-    if (!window.confirm('Are you sure you want to delete this form submission?')) {
-      return;
-    }
-
+  const deleteForm = async (formId: string) => {
+    if (!window.confirm('Are you sure you want to delete this brief?')) return;
     try {
-      const response = await fetch(`/api/forms/${formType}/${formId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete form');
-      }
-
-      // Refresh the forms list after successful deletion
-      fetchForms(formType);
-    } catch (error) {
-      setFormsError(error instanceof Error ? error.message : 'An error occurred while deleting form');
+      const response = await fetch(`/api/forms/${formId}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Failed to delete brief');
+      setMissionBriefs(missionBriefs.filter(brief => brief._id !== formId));
+      alert('Brief deleted successfully');
+    } catch (err) {
+      alert('Error deleting brief');
     }
   };
 
-  // Add useEffect to fetch forms when tab changes
-  useEffect(() => {
-    if (activePage === 'forms') {
-      fetchForms(activeFormTab);
+  const fetchUsers = async () => {
+    try {
+      setIsUsersLoading(true);
+      const response = await fetch('/api/users');
+      const data = await response.json();
+      setAdminUsers(data);
+      setIsUsersLoading(false);
+    } catch (err) {
+      console.error('Error fetching users:', err);
+      setIsUsersLoading(false);
     }
-  }, [activePage, activeFormTab]);
+  };
+
+  useEffect(() => {
+    if (activePage === 'users') {
+      fetchUsers();
+    }
+  }, [activePage]);
+
+  useEffect(() => {
+    if (activePage === 'forms' || activePage === 'dashboard') {
+      fetchMissionBriefs();
+    }
+  }, [activePage]);
 
   if (!isAuthenticated) {
     return <Login onLogin={handleLogin} />;
@@ -668,89 +643,25 @@ const Dashboard: React.FC = () => {
               <i className="fas fa-tachometer-alt"></i>
               <span>Dashboard</span>
             </li>
-            <li className={`has-sub ${isRegionOpen ? 'open' : ''}`}> 
-              <div className="menu-item" onClick={() => { setIsRegionOpen(!isRegionOpen); handleNavigation('forms'); }}>
-                <i className="fas fa-wpforms"></i>
-                <span>Forms</span>
-                <i className="fas fa-angle-left dropdown-icon"></i>
-              </div>
-              {isRegionOpen && (
-                <ul className="sub-menu">
-                  <li 
-                    className={activeFormTab === 'contact' && activePage==='forms' ? 'active' : ''}
-                    onClick={() => { setActiveFormTab('contact'); handleNavigation('forms'); }}
-                  >
-                    Contact
-                  </li>
-                  <li 
-                    className={activeFormTab === 'enquiry' && activePage==='forms' ? 'active' : ''}
-                    onClick={() => { setActiveFormTab('enquiry'); handleNavigation('forms'); }}
-                  >
-                    Enquiry
-                  </li>
-                  <li 
-                    className={activeFormTab === 'quote' && activePage==='forms' ? 'active' : ''}
-                    onClick={() => { setActiveFormTab('quote'); handleNavigation('forms'); }}
-                  >
-                    Quotes
-                  </li>
-                  <li 
-                    className={activeFormTab === 'free-offer' && activePage==='forms' ? 'active' : ''}
-                    onClick={() => { setActiveFormTab('free-offer'); handleNavigation('forms'); }}
-                  >
-                    Free Offers
-                  </li>
-                </ul>
-              )}
-            </li>
+            <li className={activePage === 'forms' ? 'active' : ''} onClick={() => setActivePage('forms')}>
+                <i className="fas fa-file-alt"></i>
+                <span>Mission Briefs</span>
+                {missionBriefs.some(b => b.status === 'new') && <span className="nav-badge">New</span>}
+              </li>
+              <li className={activePage === 'users' ? 'active' : ''} onClick={() => setActivePage('users')}>
+                <i className="fas fa-users-cog"></i>
+                <span>User Management</span>
+              </li>
+              <li className={activePage === 'portfolio' ? 'active' : ''} onClick={() => setActivePage('portfolio')}>
+                <i className="fas fa-briefcase"></i>
+                <span>Portfolio</span>
+              </li>
             <li 
-              className={activePage === 'users' ? 'active' : ''} 
-              onClick={() => handleNavigation('users')}
+              className={activePage === 'marketplace' ? 'active' : ''} 
+              onClick={() => handleNavigation('marketplace')}
             >
-              <i className="fas fa-users"></i>
-              <span>Users</span>
-            </li>
-            <li 
-              className={activePage === 'projects' ? 'active' : ''} 
-              onClick={() => handleNavigation('projects')}
-            >
-              <i className="fas fa-project-diagram"></i>
-              <span>Projects</span>
-            </li>
-            <li 
-              className={activePage === 'portfolio' || activePage === 'portfolio-detail' ? 'active' : ''} 
-              onClick={() => handleNavigation('portfolio')}
-            >
-              <i className="fas fa-images"></i>
-              <span>Portfolio</span>
-            </li>
-            <li 
-              className={activePage === 'messages' ? 'active' : ''} 
-              onClick={() => handleNavigation('messages')}
-            >
-              <i className="fas fa-envelope"></i>
-              <span>Messages</span>
-            </li>
-            <li 
-              className={activePage === 'tasks' ? 'active' : ''} 
-              onClick={() => handleNavigation('tasks')}
-            >
-              <i className="fas fa-tasks"></i>
-              <span>Tasks</span>
-            </li>
-            <li 
-              className={activePage === 'analytics' ? 'active' : ''} 
-              onClick={() => handleNavigation('analytics')}
-            >
-              <i className="fas fa-chart-line"></i>
-              <span>Analytics</span>
-            </li>
-            <li 
-              className={activePage === 'settings' ? 'active' : ''} 
-              onClick={() => handleNavigation('settings')}
-            >
-              <i className="fas fa-cog"></i>
-              <span>Settings</span>
+              <i className="fas fa-store"></i>
+              <span>AI Marketplace</span>
             </li>
           </ul>
         </div>
@@ -785,19 +696,42 @@ const Dashboard: React.FC = () => {
               <h2>{activePage.charAt(0).toUpperCase() + activePage.slice(1)}</h2>
             )}
           </div>
-          <div className="topbar-right">
-            <div className="search-box">
-              <input type="text" placeholder="Search..." />
-              <i className="fas fa-search"></i>
+            <div className="topbar-right">
+              <div className="search-box">
+                <i className="fas fa-search"></i>
+                <input type="text" placeholder="Search..." />
+              </div>
+              <div className="notification-bell" onClick={() => setShowNotifications(!showNotifications)}>
+                <i className="fas fa-bell"></i>
+                {notifications.some(n => !n.read) && <span className="notification-badge">{notifications.filter(n => !n.read).length}</span>}
+                
+                {showNotifications && (
+                  <div className="notifications-dropdown">
+                    <div className="notifications-header">
+                      <h3>Notifications</h3>
+                      <button onClick={() => setNotifications(notifications.map(n => ({...n, read: true})))}>Mark all read</button>
+                    </div>
+                    <div className="notifications-list">
+                      {notifications.map(n => (
+                        <div key={n.id} className={`notification-item ${n.read ? 'read' : ''}`}>
+                          <div className="notification-icon">
+                            <i className={n.title.includes('Brief') ? 'fas fa-paper-plane' : 'fas fa-info-circle'}></i>
+                          </div>
+                          <div className="notification-info">
+                            <h4>{n.title}</h4>
+                            <p>{n.text}</p>
+                            <span className="notification-time">{n.time}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="admin-profile">
+                <img src="https://i.pravatar.cc/150?u=keplerx-admin" alt="Admin Avatar" />
+              </div>
             </div>
-            <div className="notification-bell">
-              <i className="fas fa-bell"></i>
-              <div className="notification-badge">4</div>
-            </div>
-            <div className="admin-profile">
-              <img src="https://via.placeholder.com/40" alt="Admin" />
-            </div>
-          </div>
         </div>
         
         <div className="admin-content">
@@ -805,43 +739,35 @@ const Dashboard: React.FC = () => {
             <>
               <div className="admin-stats">
                 <div className="stats-card">
-                  <div className="stats-icon">
-                    <i className="fas fa-users"></i>
-                  </div>
+                  <div className="stats-icon"><i className="fas fa-paper-plane"></i></div>
                   <div className="stats-info">
-                    <h3>Total Users</h3>
-                    <div className="stats-number">8,249</div>
-                    <div className="stats-change positive">+12.5% this month</div>
+                    <h3>Total Briefs</h3>
+                    <div className="stats-number">{missionBriefs.length}</div>
+                    <div className="stats-change positive">Lifetime Submissions</div>
                   </div>
                 </div>
                 <div className="stats-card">
-                  <div className="stats-icon">
-                    <i className="fas fa-project-diagram"></i>
-                  </div>
+                  <div className="stats-icon"><i className="fas fa-bell"></i></div>
                   <div className="stats-info">
-                    <h3>Projects</h3>
-                    <div className="stats-number">142</div>
-                    <div className="stats-change positive">+8.3% this month</div>
+                    <h3>Action Required</h3>
+                    <div className="stats-number">{missionBriefs.filter(b => b.status === 'new').length}</div>
+                    <div className="stats-change negative">Awaiting Review</div>
                   </div>
                 </div>
                 <div className="stats-card">
-                  <div className="stats-icon">
-                    <i className="fas fa-dollar-sign"></i>
-                  </div>
+                  <div className="stats-icon"><i className="fas fa-check-circle"></i></div>
                   <div className="stats-info">
-                    <h3>Revenue</h3>
-                    <div className="stats-number">$142,503</div>
-                    <div className="stats-change positive">+5.4% this month</div>
+                    <h3>Converted</h3>
+                    <div className="stats-number">{missionBriefs.filter(b => b.status === 'converted').length}</div>
+                    <div className="stats-change positive">Project Success</div>
                   </div>
                 </div>
                 <div className="stats-card">
-                  <div className="stats-icon">
-                    <i className="fas fa-ticket-alt"></i>
-                  </div>
+                  <div className="stats-icon"><i className="fas fa-briefcase"></i></div>
                   <div className="stats-info">
-                    <h3>Support Tickets</h3>
-                    <div className="stats-number">48</div>
-                    <div className="stats-change negative">-2.5% this month</div>
+                    <h3>Portfolio</h3>
+                    <div className="stats-number">{portfolioItems.length}</div>
+                    <div className="stats-change positive">Showcased Items</div>
                   </div>
                 </div>
               </div>
@@ -903,50 +829,26 @@ const Dashboard: React.FC = () => {
                 </div>
                 
                 <div className="admin-section-card">
-                  <h3>Recent Messages</h3>
+                  <h3>Recent Mission Briefs</h3>
                   <div className="message-list">
-                    <div className="message-item">
-                      <div className="message-avatar">J</div>
-                      <div className="message-content">
-                        <div className="message-header">
-                          <h4>John Smith</h4>
-                          <span className="message-time">2 hours ago</span>
+                    {missionBriefs.length === 0 ? (
+                      <div className="no-data">No briefs received yet.</div>
+                    ) : (
+                      missionBriefs.slice(0, 4).map(brief => (
+                        <div key={brief._id} className="message-item">
+                          <div className="message-avatar">{brief.name.charAt(0)}</div>
+                          <div className="message-content">
+                            <div className="message-header">
+                              <h4>{brief.name}</h4>
+                              <span className="message-time">{new Date(brief.submittedAt).toLocaleDateString()}</span>
+                            </div>
+                            <p>{brief.message.substring(0, 100)}{brief.message.length > 100 ? '...' : ''}</p>
+                          </div>
                         </div>
-                        <p>We would like to discuss the pricing options for our new project. Can we schedule a call?</p>
-                      </div>
-                    </div>
-                    <div className="message-item">
-                      <div className="message-avatar">A</div>
-                      <div className="message-content">
-                        <div className="message-header">
-                          <h4>Alice Johnson</h4>
-                          <span className="message-time">Yesterday</span>
-                        </div>
-                        <p>Thank you for the quick response. The design looks great, we just need a few minor adjustments.</p>
-                      </div>
-                    </div>
-                    <div className="message-item">
-                      <div className="message-avatar">M</div>
-                      <div className="message-content">
-                        <div className="message-header">
-                          <h4>Michael Brown</h4>
-                          <span className="message-time">2 days ago</span>
-                        </div>
-                        <p>Is it possible to add a new feature to our website? We need a booking system integrated.</p>
-                      </div>
-                    </div>
-                    <div className="message-item">
-                      <div className="message-avatar">S</div>
-                      <div className="message-content">
-                        <div className="message-header">
-                          <h4>Sarah Lee</h4>
-                          <span className="message-time">3 days ago</span>
-                        </div>
-                        <p>I'm impressed with the work your team has done on our social media campaign. The engagement has increased by 45%!</p>
-                      </div>
-                    </div>
+                      ))
+                    )}
                   </div>
-                  <a href="#" className="view-all-link">View All Messages</a>
+                  <a href="#" onClick={() => handleNavigation('forms')} className="view-all-link">View All Briefs</a>
                 </div>
               </div>
             </>
@@ -1130,42 +1032,10 @@ const Dashboard: React.FC = () => {
             </div>
           )}
           
-          {activePage === 'users' && (
-            <div className="admin-section-card">
-              <h3>User Management</h3>
-              <p>User management content will go here</p>
-            </div>
+          {activePage === 'marketplace' && (
+            <MarketplaceAdmin />
           )}
-          {activePage === 'projects' && (
-            <div className="admin-section-card">
-              <h3>Project Management</h3>
-              <p>Project management content will go here</p>
-            </div>
-          )}
-          {activePage === 'messages' && (
-            <div className="admin-section-card">
-              <h3>Message Center</h3>
-              <p>Message center content will go here</p>
-            </div>
-          )}
-          {activePage === 'tasks' && (
-            <div className="admin-section-card">
-              <h3>Task Management</h3>
-              <p>Task management content will go here</p>
-            </div>
-          )}
-          {activePage === 'analytics' && (
-            <div className="admin-section-card">
-              <h3>Analytics Dashboard</h3>
-              <p>Analytics content will go here</p>
-            </div>
-          )}
-          {activePage === 'settings' && (
-            <div className="admin-section-card">
-              <h3>System Settings</h3>
-              <p>Settings content will go here</p>
-            </div>
-          )}
+
           {activePage === 'forms' && (
             <div className="forms-section">
               <div className="admin-section-header">
@@ -1182,214 +1052,105 @@ const Dashboard: React.FC = () => {
               ) : formsError ? (
                 <div className="error-container">
                   <p>{formsError}</p>
-                  <button onClick={() => fetchForms(activeFormTab)} className="retry-btn">
+                  <button onClick={() => fetchMissionBriefs()} className="retry-btn">
                     Retry
                   </button>
                 </div>
               ) : (
                 <div className="forms-content">
-                  {activeFormTab === 'contact' && (
-                    <div className="admin-table-container">
-                      <table className="admin-table">
-                        <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Subject</th>
-                            <th>Message</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                  <div className="admin-table-container">
+                    <table className="admin-table">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Company</th>
+                          <th>Service</th>
+                          <th>Budget</th>
+                          <th>Message</th>
+                          <th>Date</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {missionBriefs.map(brief => (
+                          <tr key={brief._id}>
+                            <td><strong>{brief.name}</strong></td>
+                            <td>{brief.email}</td>
+                            <td>{brief.company || '-'}</td>
+                            <td><span className="service-tag">{brief.service}</span></td>
+                            <td>{brief.budget}</td>
+                            <td><div className="brief-msg">{brief.message}</div></td>
+                            <td>{new Date(brief.submittedAt).toLocaleDateString()}</td>
+                            <td>
+                              <select 
+                                value={brief.status}
+                                onChange={(e) => updateFormStatus(brief._id, e.target.value)}
+                                className={`status-select ${brief.status}`}
+                              >
+                                <option value="new">New</option>
+                                <option value="reviewing">Reviewing</option>
+                                <option value="contacted">Contacted</option>
+                                <option value="converted">Converted</option>
+                                <option value="archived">Archived</option>
+                              </select>
+                            </td>
+                            <td>
+                              <button onClick={() => deleteForm(brief._id)} className="delete-btn">
+                                <i className="fas fa-trash-alt"></i>
+                              </button>
+                            </td>
                           </tr>
-                        </thead>
-                        <tbody>
-                          {contactForms.map(form => (
-                            <tr key={form._id}>
-                              <td>{form.name}</td>
-                              <td>{form.email}</td>
-                              <td>{form.phone}</td>
-                              <td>{form.subject}</td>
-                              <td>{form.message.substring(0, 50)}...</td>
-                              <td>{new Date(form.submittedAt).toLocaleDateString()}</td>
-                              <td>
-                                <select 
-                                  value={form.status}
-                                  onChange={(e) => updateFormStatus('contact', form._id, e.target.value)}
-                                  className={`status-select ${form.status}`}
-                                >
-                                  <option value="new">New</option>
-                                  <option value="read">Read</option>
-                                  <option value="responded">Responded</option>
-                                </select>
-                              </td>
-                              <td>
-                                <button 
-                                  onClick={() => deleteForm('contact', form._id)}
-                                  className="delete-btn"
-                                >
-                                  <i className="fas fa-trash-alt"></i>
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-
-                  {activeFormTab === 'enquiry' && (
-                    <div className="admin-table-container">
-                      <table className="admin-table">
-                        <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Company</th>
-                            <th>Service</th>
-                            <th>Message</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {enquiryForms.map(form => (
-                            <tr key={form._id}>
-                              <td>{form.name}</td>
-                              <td>{form.email}</td>
-                              <td>{form.phone}</td>
-                              <td>{form.company}</td>
-                              <td>{form.service}</td>
-                              <td>{form.message.substring(0, 50)}...</td>
-                              <td>{new Date(form.submittedAt).toLocaleDateString()}</td>
-                              <td>
-                                <select 
-                                  value={form.status}
-                                  onChange={(e) => updateFormStatus('enquiry', form._id, e.target.value)}
-                                  className={`status-select ${form.status}`}
-                                >
-                                  <option value="new">New</option>
-                                  <option value="read">Read</option>
-                                  <option value="responded">Responded</option>
-                                </select>
-                              </td>
-                              <td>
-                                <button 
-                                  onClick={() => deleteForm('enquiry', form._id)}
-                                  className="delete-btn"
-                                >
-                                  <i className="fas fa-trash-alt"></i>
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-
-                  {activeFormTab === 'quote' && (
-                    <div className="admin-table-container">
-                      <table className="admin-table">
-                        <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Company</th>
-                            <th>Service</th>
-                            <th>Budget</th>
-                            <th>Timeline</th>
-                            <th>Details</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {quoteForms.map(form => (
-                            <tr key={form._id}>
-                              <td>{form.name}</td>
-                              <td>{form.email}</td>
-                              <td>{form.phone}</td>
-                              <td>{form.company}</td>
-                              <td>{form.service}</td>
-                              <td>{form.budget}</td>
-                              <td>{form.timeline}</td>
-                              <td>{form.projectDetails.substring(0, 50)}...</td>
-                              <td>{new Date(form.submittedAt).toLocaleDateString()}</td>
-                              <td>
-                                <select 
-                                  value={form.status}
-                                  onChange={(e) => updateFormStatus('quote', form._id, e.target.value)}
-                                  className={`status-select ${form.status}`}
-                                >
-                                  <option value="new">New</option>
-                                  <option value="read">Read</option>
-                                  <option value="quoted">Quoted</option>
-                                  <option value="accepted">Accepted</option>
-                                  <option value="rejected">Rejected</option>
-                                </select>
-                              </td>
-                              <td>
-                                <button 
-                                  onClick={() => deleteForm('quote', form._id)}
-                                  className="delete-btn"
-                                >
-                                  <i className="fas fa-trash-alt"></i>
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-
-                  {activeFormTab === 'free-offer' && (
-                    <div className="admin-table-container">
-                      <table className="admin-table">
-                        <thead>
-                          <tr>
-                            <th>Email</th>
-                            <th>Message</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {freeOfferForms.map(form => (
-                            <tr key={form._id}>
-                              <td>{form.email}</td>
-                              <td>{form.message?.substring(0,50)}...</td>
-                              <td>{new Date(form.submittedAt).toLocaleDateString()}</td>
-                              <td>
-                                <select 
-                                  value={form.status}
-                                  onChange={(e) => updateFormStatus('free-offer', form._id, e.target.value)}
-                                  className={`status-select ${form.status}`}
-                                >
-                                  <option value="new">New</option>
-                                  <option value="read">Read</option>
-                                  <option value="responded">Responded</option>
-                                </select>
-                              </td>
-                              <td>
-                                <button className="delete-btn" onClick={() => deleteForm('free-offer', form._id)}>
-                                  <i className="fas fa-trash-alt"></i>
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {activePage === 'users' && (
+            <div className="users-section">
+              <div className="admin-section-header">
+                <h3>User Management</h3>
+                <button className="add-button" onClick={() => alert('Add User Modal coming soon!')}>
+                  <i className="fas fa-plus"></i> Add User
+                </button>
+              </div>
+              
+              <div className="admin-table-container">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>SMTP Host</th>
+                      <th>SMTP User</th>
+                      <th>Created</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {adminUsers.map(user => (
+                      <tr key={user.id}>
+                        <td><strong>{user.name}</strong></td>
+                        <td>{user.email}</td>
+                        <td><span className="service-tag">{user.role}</span></td>
+                        <td>{user.smtp_host || '-'}</td>
+                        <td>{user.smtp_user || '-'}</td>
+                        <td>{new Date(user.createdat).toLocaleDateString()}</td>
+                        <td>
+                          <button className="action-btn edit"><i className="fas fa-edit"></i></button>
+                          <button className="action-btn delete"><i className="fas fa-trash-alt"></i></button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
