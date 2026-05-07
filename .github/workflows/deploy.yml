@@ -46,13 +46,15 @@ jobs:
         run: |
           echo "${{ secrets.VPS_SSH_KEY }}" > deploy_key
           chmod 600 deploy_key
-          ssh-keyscan -H ${{ secrets.VPS_IP }} >> ~/.ssh/known_hosts
           
-          # Upload
-          scp -i deploy_key deploy.zip ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/home/newuser/keplerx/
+          # Debug: Check if zip exists
+          ls -lh deploy.zip
+          
+          # Upload with detailed error output
+          scp -v -o StrictHostKeyChecking=no -i deploy_key deploy.zip ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}:/home/newuser/keplerx/
           
           # Unpack and Start
-          ssh -i deploy_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} "
+          ssh -v -o StrictHostKeyChecking=no -i deploy_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} "
             cd /home/newuser/keplerx && \
             unzip -o deploy.zip && \
             cd backend && \
