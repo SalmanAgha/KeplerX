@@ -1,0 +1,76 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: crm-postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: RealAI_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - crm_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d RealAI_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: crm-backend-api
+    restart: always
+    environment:
+      - PORT=5001
+      - ACCESS_TOKEN_SECRET=secret_key_2026_super_secure
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/RealAI_db?schema=public
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - SESSION_SECRET=your_random_session_secret
+      - FRONTEND_URL=http://localhost:3000
+    ports:
+      - "5001:5001"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "npx prisma db push && npm start"
+
+  queue-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: crm-queue-worker
+    restart: always
+    environment:
+      - QUEUE_PORT=5002
+      - ACCESS_TOKEN_SECRET=secret_key_2026_super_secure
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/RealAI_db?schema=public
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - SESSION_SECRET=your_random_session_secret
+      - FRONTEND_URL=http://localhost:3000
+    ports:
+      - "5002:5002"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: node src/queueService.js
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:5001/api}
+    container_name: crm-frontend-app
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  crm_postgres_data:

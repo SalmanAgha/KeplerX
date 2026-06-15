@@ -18,6 +18,11 @@ interface VpsPurchase {
   billName?: string;
   username?: string;
   password?: string;
+  referredById?: string;
+  referredBy?: {
+    name?: string;
+    email: string;
+  };
   createdAt: string;
   vpsSales?: Array<{
     id: string;
@@ -48,7 +53,17 @@ export default function VpsPurchasesPage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPurchase, setEditingPurchase] = useState<VpsPurchase | null>(null);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    vendorName: string;
+    nodeName: string;
+    ipAddress: string;
+    cost: number | '';
+    status: string;
+    renewalDate: string;
+    username: string;
+    password: string;
+    referredById: string;
+  }>({
     vendorName: '', nodeName: '', ipAddress: '', cost: 0, status: 'active', renewalDate: '', username: '', password: '', referredById: ''
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -476,7 +491,7 @@ export default function VpsPurchasesPage() {
               <div style={{ display: 'flex', gap: '16px' }}>
                 <div style={{ flex: 1 }}>
                   <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Monthly Cost ($) *</label>
-                  <input required type="number" step="0.01" min="0" className="input-field" style={{ padding: '8px 12px', fontSize: '13px' }} value={isNaN(formData.cost) || formData.cost === '' ? '' : formData.cost} onChange={e => { const val = parseFloat(e.target.value); setFormData({...formData, cost: isNaN(val) ? '' : val}); }} />
+                  <input required type="number" step="0.01" min="0" className="input-field" style={{ padding: '8px 12px', fontSize: '13px' }} value={formData.cost === '' || isNaN(formData.cost as number) ? '' : String(formData.cost)} onChange={e => { const val = parseFloat(e.target.value); setFormData({...formData, cost: isNaN(val) ? '' : val}); }} />
                 </div>
                 <div style={{ flex: 1 }}>
                   <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Status</label>
