@@ -56,7 +56,8 @@ export default function Sidebar({ isOpen, user }: SidebarProps) {
       label: 'Settings', 
       icon: Settings,
       subItems: [
-        { label: 'Users', path: '/admin/settings/users' },
+        { label: 'Users', path: '/admin/users' },
+        { label: 'Admins', path: '/admin/admins' },
         { label: 'Cron Jobs', path: '/admin/settings/cron' }
       ]
     },
