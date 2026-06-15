@@ -1,0 +1,26 @@
+name: Deploy KeplerX (Docker Compose)
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS via SSH
+        run: |
+          echo "${{ secrets.VPS_SSH_KEY }}" > deploy_key
+          chmod 600 deploy_key
+          
+          ssh -o StrictHostKeyChecking=no -i deploy_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} "
+            cd /home/newuser/keplerx && \
+            git fetch origin && \
+            git reset --hard origin/prod && \
+            docker compose up -d --build && \
+            docker image prune -f
+          "
+          
+          rm -f deploy_key
