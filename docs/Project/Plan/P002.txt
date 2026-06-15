@@ -1,0 +1,266 @@
+You are a principal-level AI engineer, fintech product architect, and backend systems designer.
+
+Your job is to build a production-grade MVP for a Mortgage Advisor Copilot.
+
+This is NOT a demo chatbot. This is a DECISION ENGINE for mortgage affordability and advisory.
+
+==================================================
+
+1. PRODUCT GOAL
+   ==================================================
+
+Build a system that:
+
+1. Accepts structured user financial data
+2. Simulates mortgage options
+3. Evaluates affordability and risk
+4. Produces explainable AI recommendations
+5. Optionally uses RAG for mortgage regulations
+
+The system must output structured decisions + human-readable explanations.
+
+==================================================
+2. CORE FEATURES
+================
+
+A. Customer Financial Intake
+
+Input schema (strict validation required):
+
+{
+"user_id": "string",
+"monthly_income": number,
+"monthly_expenses": number,
+"savings": number,
+"employment_type": "full-time | part-time | self-employed",
+"credit_score": number,
+"existing_debt": number,
+"property_price": number,
+"location": "string",
+"down_payment": number
+}
+
+---
+
+B. Mortgage Simulation Engine
+
+Implement deterministic financial logic:
+
+* loan_amount = property_price - down_payment
+* interest_rate = mock based on credit_score
+* term_years = 25 or 30
+* monthly_payment calculation
+
+Use standard amortization formula.
+
+---
+
+C. Financial Risk Engine
+
+Compute:
+
+1. Debt-to-Income Ratio (DTI)
+   = (monthly_payment + existing_debt) / monthly_income
+
+2. Loan-to-Value Ratio (LTV)
+   = loan_amount / property_price
+
+3. Savings buffer (months of expenses)
+
+Define thresholds:
+
+* DTI > 0.4 → HIGH RISK
+* LTV > 0.9 → HIGH RISK
+* Savings < 6 months → WARNING
+
+Output:
+
+{
+"affordability": "low | medium | high",
+"risk_flags": [],
+"score": 0-100
+}
+
+---
+
+D. AI Explanation Layer (CRITICAL)
+
+Use LLM to generate:
+
+1. Personalized explanation
+2. Risk justification
+3. Actionable recommendations
+
+Prompt must include:
+
+* All computed metrics
+* Clear instruction: DO NOT hallucinate
+* Tone: professional financial advisor
+
+Example output:
+
+"Based on your income and debt levels, your mortgage is moderately affordable. However, your debt-to-income ratio exceeds recommended thresholds..."
+
+---
+
+E. Mortgage Options Generator
+
+Generate 2–3 options:
+
+* conservative
+* balanced
+* aggressive
+
+Each option must vary:
+
+* loan size
+* interest rate
+* monthly payment
+
+---
+
+F. RAG Module (Optional but strong signal)
+
+Use vector DB with dummy docs:
+
+* German mortgage rules
+* affordability guidelines
+* lending constraints
+
+Allow user query:
+
+"Why was I rejected?"
+
+Retrieve context → pass to LLM.
+
+---
+
+==================================================
+3. SYSTEM ARCHITECTURE
+======================
+
+Backend:
+
+* FastAPI (preferred)
+* Modular services:
+
+  /services
+  financial_engine.py
+  risk_engine.py
+  mortgage_simulator.py
+  ai_explainer.py
+  rag_service.py
+
+---
+
+API Routes:
+
+POST /analyze
+→ runs full pipeline
+
+POST /simulate
+→ returns mortgage options only
+
+POST /explain
+→ returns LLM explanation
+
+POST /ask
+→ RAG-based Q&A
+
+---
+
+==================================================
+4. DATABASE SCHEMA
+==================
+
+Table: users
+
+* id
+* income
+* expenses
+* savings
+* credit_score
+
+Table: mortgage_analysis
+
+* id
+* user_id
+* loan_amount
+* monthly_payment
+* dti
+* ltv
+* affordability
+* risk_score
+* created_at
+
+---
+
+==================================================
+5. AI PROMPT DESIGN
+===================
+
+System Prompt:
+
+"You are a professional mortgage advisor in Germany. You provide accurate, conservative, and explainable financial guidance. You never hallucinate numbers."
+
+User Prompt Template:
+
+* Include ALL computed metrics
+* Ask for:
+
+  1. explanation
+  2. risk summary
+  3. recommendations
+
+---
+
+==================================================
+6. DUMMY DATA GENERATION
+========================
+
+Generate 50–100 realistic user profiles with:
+
+* varying income levels
+* different credit scores
+* edge cases (low savings, high debt)
+
+---
+
+==================================================
+7. FRONTEND (MINIMAL BUT CLEAN)
+===============================
+
+Pages:
+
+1. Input Form
+2. Results Dashboard:
+
+   * key metrics
+   * risk flags
+   * mortgage options
+   * AI explanation
+
+---
+
+==================================================
+8. NON-NEGOTIABLE RULES
+=======================
+
+* NO fake AI outputs
+* NO hardcoded responses
+* ALL numbers must be computed
+* AI only explains, not calculates
+
+---
+
+==================================================
+9. BONUS (IF TIME)
+==================
+
+* Add "What should I change to qualify?"
+* Simulate improved scenarios
+* Show delta impact
+
+---
+
+Deliver clean, modular, production-ready code.

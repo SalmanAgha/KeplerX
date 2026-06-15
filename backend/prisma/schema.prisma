@@ -1,0 +1,241 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "darwin-arm64"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String?        // Password can be null for OAuth users
+  googleId      String?        @unique
+  avatar        String?
+  name          String?
+  role          String         @default("user") // 'user', 'admin'
+  subscription  String         @default("free") // 'free', 'pro', 'enterprise'
+  status        String         @default("active") // 'active', 'pending', etc.
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  subscriptions Subscription[]
+  teamMemberships TeamMember[]
+  activityLogs    ActivityLog[]
+  notifications   Notification[]
+  referredVpsSales     VpsSale[]     @relation("VpsSaleReferredBy")
+  referredVpsPurchases VpsPurchase[] @relation("VpsPurchaseReferredBy")
+  assignedTasks        Task[]        @relation("AssignedTasks")
+}
+
+model Subscription {
+  id          String    @id @default(uuid())
+  userId      String
+  type        String
+  status      String    @default("active")
+  renewalDate DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Team {
+  id          String       @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  members     TeamMember[]
+  activities  ActivityLog[]
+}
+
+model TeamMember {
+  id        String   @id @default(uuid())
+  teamId    String
+  userId    String
+  role      String   @default("MEMBER") // 'OWNER', 'ADMIN', 'MEMBER'
+  joinedAt  DateTime @default(now())
+
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  userId    String
+  teamId    String?
+  action    String   // 'TEAM_CREATED', 'MEMBER_ADDED', 'LOGIN', etc.
+  details   String?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team      Team?    @relation(fields: [teamId], references: [id], onDelete: SetNull)
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  permissions String[] // Array of permissions like 'USER_CREATE', 'DEPT_MANAGE'
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String
+  type      String   @default("info") // 'info', 'success', 'warning', 'error'
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model JobQueue {
+  id          String   @id @default(uuid())
+  type        String   // 'EMAIL', 'NOTIFICATION'
+  payload     Json     // Data needed for the job
+  status      String   @default("PENDING") // 'PENDING', 'PROCESSING', 'COMPLETED', 'FAILED'
+  error       String?  // Stack trace or error message if failed
+  attempts    Int      @default(0)
+  runAt       DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Customer {
+  id          String   @id @default(uuid())
+  customerId  String   @unique
+  firstName   String
+  lastName    String
+  email       String   @unique
+  password    String
+  phone       String?
+  country     String?
+  status      String   @default("active") // 'active', 'inactive'
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  vpsSales VpsSale[]
+}
+
+
+
+model SmtpConfig {
+  id        String   @id @default(uuid())
+  host      String
+  port      Int
+  user      String
+  password  String
+  fromEmail String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VpsProduct {
+  id          String   @id @default(uuid())
+  name        String
+  details     String?  @db.Text
+  price       Float
+  country     String?
+  status      String   @default("active") // 'active', 'inactive'
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  vpsSales VpsSale[]
+}
+
+model VpsSale {
+  id              String       @id @default(uuid())
+  invoiceNumber   String       @unique
+  customerId      String
+  vpsProductId    String
+  vpsPurchaseId   String?
+  price           Float
+  status          String       @default("active") // 'active', 'suspended', 'cancelled'
+  startDate       DateTime     @default(now())
+  endDate         DateTime?
+  invoicePath     String?      // Stored path to uploaded PDF invoice
+  invoiceName     String?      // Original filename
+  reminder1Sent   Boolean      @default(false)
+  reminder2Sent   Boolean      @default(false)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  referredById    String?
+  referredBy      User?        @relation("VpsSaleReferredBy", fields: [referredById], references: [id])
+
+  customer        Customer     @relation(fields: [customerId], references: [id])
+  vpsProduct      VpsProduct   @relation(fields: [vpsProductId], references: [id])
+  vpsPurchase     VpsPurchase? @relation(fields: [vpsPurchaseId], references: [id])
+}
+
+model VpsPurchase {
+  id             String      @id @default(uuid())
+  vendorName     String
+  nodeName       String
+  ipAddress      String?
+  cost           Float
+  status         String      @default("active")
+  renewalDate    DateTime?
+  billPath       String?    // Stored path to uploaded PDF bill
+  billName       String?    // Original filename
+  username       String?    // Credentials to access the node
+  password       String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  referredById   String?
+  referredBy     User?       @relation("VpsPurchaseReferredBy", fields: [referredById], references: [id])
+
+  vpsSales       VpsSale[]
+}
+
+model VpsSetting {
+  id                String   @id @default(uuid())
+  reminder1Days     Int      @default(7)
+  reminder1Enabled  Boolean  @default(true)
+  reminder2Days     Int      @default(3)
+  reminder2Enabled  Boolean  @default(true)
+  emailSubject      String   @default("Subscription Expiry Reminder")
+  emailBody         String   @db.Text @default("Dear Customer,\n\nThis is a reminder that your VPS subscription ({invoice}) for product {product} is expiring in {days} days on {endDate}.\n\nPlease renew to avoid any service disruption.\n\nBest regards,\nKeplerX Team")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Task {
+  id            String    @id @default(uuid())
+  title         String
+  description   String?   @db.Text
+  status        String    @default("TODO") // "TODO", "IN_PROGRESS", "IN_REVIEW", "DONE"
+  priority      String    @default("MEDIUM") // "LOW", "MEDIUM", "HIGH", "URGENT"
+  dueDate       DateTime?
+  tags          String[]  @default([])
+  order         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  assignedToId  String?
+  assignedTo    User?     @relation("AssignedTasks", fields: [assignedToId], references: [id])
+}
+
+model CronJobLog {
+  id                 String    @id @default(uuid())
+  name               String
+  status             String    // 'PROCESSING', 'SUCCESS', 'FAILED'
+  processedJobsCount Int       @default(0)
+  details            String?   @db.Text
+  error              String?   @db.Text
+  startedAt          DateTime  @default(now())
+  completedAt        DateTime?
+}

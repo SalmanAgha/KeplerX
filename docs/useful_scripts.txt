@@ -1,0 +1,4 @@
+Default Credentials:
+Admin Email: admin@saas.com
+User Email: user@saas.com
+Password: password (for both)

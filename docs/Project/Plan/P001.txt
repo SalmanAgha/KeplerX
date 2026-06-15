@@ -1,0 +1,51 @@
+# Project Plan: P001 - Full Authentication and Team Management System
+
+## Overview
+This plan outlines the implementation of a robust authentication, authorization, and team management system for the RealAI project. The system will leverage PostgreSQL (RealAI_db), JWT for session management, and Passport.js for OAuth.
+
+## Phase 1: Database & Schema Evolution
+- [ ] Update `.env` to use `RealAI_db`.
+- [ ] Create `RealAI_db` database if not exists.
+- [ ] Update `backend/prisma/schema.prisma` with:
+    - User enhancements (OAuth provider IDs).
+    - Team model.
+    - Membership model (mapping users to teams with specific roles).
+- [ ] Run Prisma migrations to sync the database.
+
+## Phase 2: Backend Authentication Implementation
+- [ ] **JWT Implementation**:
+    - Setup token signing and verification logic.
+    - Implement refresh token mechanism for longer sessions.
+- [ ] **OAuth Implementation**:
+    - Configure Passport.js with Google Strategy.
+    - Handle OAuth callbacks and user creation/merging.
+- [ ] **Email/Password Auth**:
+    - Register route with password hashing (Bcrypt).
+    - Login route with JWT emission.
+- [ ] **Logout**:
+    - Implement safe logout by clearing client-side tokens.
+
+## Phase 3: Role-Based Access Control (RBAC) & Team Management
+- [ ] **RBAC Middleware**:
+    - Create `authorizeRole` middleware to protect specific endpoints.
+- [ ] **Team Logic**:
+    - Create/Update/Delete Team endpoints.
+    - Invite/Add/Remove members endpoints.
+    - Logic for role assignment within a team (Owner, Admin, Member).
+
+## Phase 4: Frontend Integration (Next.js)
+- [ ] **Auth Context**:
+    - Build `AuthContext` to manage user state globally.
+- [ ] **UI Components**:
+    - Premium Login/Register pages.
+    - OAuth buttons (Google/GitHub).
+- [ ] **Team Dashboard**:
+    - Interface to create teams and manage members.
+- [ ] **Protected Routes**:
+    - Implement client-side route guarding.
+
+## Success Criteria
+- Users can sign up via email or Google.
+- Tokens are securely handled and stored.
+- Admins can restrict access to certain backend routes.
+- Users can create teams and assign roles to members.
