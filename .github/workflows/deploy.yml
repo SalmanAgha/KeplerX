@@ -1,0 +1,61 @@
+name: Deploy KeplerX website
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+      - 'docs/legal/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: keplerx-production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      # react-scripts 3 uses webpack 4; this avoids OpenSSL errors on Node 20.
+      NODE_OPTIONS: --openssl-legacy-provider
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: frontend
+        env:
+          CI: false
+        run: npm run build
+
+      - name: Deploy release over SSH
+        env:
+          SSH_KEY: ${{ secrets.KEPLERX_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.KEPLERX_SSH_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s\n' "$SSH_KEY" > "$HOME/.ssh/keplerx_deploy_key"
+          chmod 600 "$HOME/.ssh/keplerx_deploy_key"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 644 "$HOME/.ssh/known_hosts"
+          ssh_opts="-i $HOME/.ssh/keplerx_deploy_key -o StrictHostKeyChecking=yes"
+          release_dir="/var/www/keplerx.co/releases/${GITHUB_SHA}"
+          rsync -az --delete -e "ssh $ssh_opts" frontend/build/ "newuser@31.97.62.124:${release_dir}/"
+          ssh $ssh_opts newuser@31.97.62.124 "set -eu
+            ln -sfn '${release_dir}' /var/www/keplerx.co/html.new
+            mv -Tf /var/www/keplerx.co/html.new /var/www/keplerx.co/html
+            find /var/www/keplerx.co/releases -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\\n' | sort -nr | tail -n +6 | cut -d' ' -f2- | xargs -r rm -rf"
+          curl -fsS https://keplerx.co/privacy/ | grep -q "KeplerX"

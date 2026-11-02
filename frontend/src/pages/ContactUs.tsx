@@ -178,7 +178,7 @@ const ContactUs: React.FC = () => {
                     <strong>USA</strong> +1 925 3414413
                   </div>
                   <div className="office-item">
-                    <strong>PK</strong> +92 314 6963877
+                    <strong>PK</strong> +92 334 7360763
                   </div>
                 </div>
               </div>

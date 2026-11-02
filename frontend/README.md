@@ -4,6 +4,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
+The app uses Node.js 20 in CI. Because `react-scripts` 3 uses webpack 4, builds set
+`NODE_OPTIONS=--openssl-legacy-provider` to avoid the OpenSSL compatibility error
+on modern Node.js versions.
+
 In the project directory, you can run:
 
 ### `npm start`

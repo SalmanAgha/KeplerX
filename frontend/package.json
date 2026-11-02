@@ -27,6 +27,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "prebuild": "node scripts/build-legal.js",
     "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
     "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
     "test": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts test",

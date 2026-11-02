@@ -10,6 +10,14 @@ import Marketplace from './pages/Marketplace';
 import ProjectDetail from './pages/ProjectDetail';
 import Dashboard from './admin/Dashboard';
 
+const LegalRedirect: React.FC<{ path: string }> = ({ path }) => {
+  useEffect(() => {
+    window.location.replace(path);
+  }, [path]);
+
+  return null;
+};
+
 const AppLayout: React.FC = () => {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
@@ -34,6 +42,8 @@ const AppLayout: React.FC = () => {
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/marketplace/:slug" element={<ProjectDetail />} />
+          <Route path="/privacy" element={<LegalRedirect path="/privacy/" />} />
+          <Route path="/terms" element={<LegalRedirect path="/terms/" />} />
           <Route path="/admin/dashboard" element={<Dashboard />} />
           {/* Catch-all redirect */}
           <Route path="*" element={<Home />} />

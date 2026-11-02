@@ -95,6 +95,7 @@
 
 .footer-links-group li a,
 .footer-links-group li span {
+  display: block;
   font-size: 14px;
   color: var(--text-secondary);
   transition: var(--transition);

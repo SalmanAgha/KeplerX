@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import './Footer.css';
 
 const Footer: React.FC = () => {
-  const year = new Date().getFullYear();
   return (
     <footer className="footer">
       <div className="footer-glow"></div>
@@ -48,20 +47,20 @@ const Footer: React.FC = () => {
           <div className="footer-links-group">
             <h4>Contact</h4>
             <ul>
+              <li><span>B-122, AEECHS, Gulistan-e-Johar Block 8, Karachi East, Karachi, Pakistan</span></li>
               <li><a href="mailto:info@keplerx.co">info@keplerx.co</a></li>
               <li><a href="tel:+19253414413">USA: +1 925 341 4413</a></li>
-              <li><a href="tel:+923146963877">PK: +92 314 696 3877</a></li>
+              <li><a href="tel:+923347360763">PK: +92 334 7360763</a></li>
               <li><span>Hampshire, IL</span></li>
-              <li><span>Karachi, Pakistan</span></li>
             </ul>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <p>© {year} KeplerX. All rights reserved.</p>
+          <p>© 2026 KeplerX. All rights reserved.</p>
           <div className="footer-bottom-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
+            <a href="/privacy/">Privacy Policy</a>
+            <a href="/terms/">Terms of Service</a>
           </div>
         </div>
       </div>
